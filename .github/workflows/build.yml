@@ -5,6 +5,11 @@ on:
     branches: [main, master]
   pull_request:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "To publish a release, enter its version tag (e.g. v1.0.1). Leave empty to only build."
+        required: false
+        default: ""
   release:
     types: [published]    # publishing a GitHub Release attaches the installer to it
 
@@ -82,7 +87,7 @@ jobs:
 
   release:
     needs: build
-    if: github.event_name == 'release'
+    if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.release_tag != '')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -92,10 +97,15 @@ jobs:
           name: office-pragmatics-installer
           path: dist
 
-      - name: Attach installers to the release
+      - name: Publish or update the release
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.event.release.tag_name }}
+          TAG: ${{ github.event.release.tag_name || inputs.release_tag }}
         run: |
-          gh release upload "$TAG" dist/Office-Pragmatics-Setup.exe dist/Office-Pragmatics.msi \
-            --repo "$GITHUB_REPOSITORY" --clobber
+          files="dist/Office-Pragmatics-Setup.exe dist/Office-Pragmatics.msi"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release upload "$TAG" $files --repo "$GITHUB_REPOSITORY" --clobber
+          else
+            gh release create "$TAG" $files --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" --title "Office Pragmatics $TAG" --generate-notes
+          fi
