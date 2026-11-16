@@ -283,7 +283,7 @@ namespace Office_Pragmatics_Word
                 case "btnLibrary": return "Opens the asset library manager. Browse, organize, and insert reusable content including shapes, text blocks, and custom libraries. Ability to create a shared company or team library (path set in Office Pragmatics settings).";
 
                 // Doc Tools
-                case "btnFormEditor": return "Opens the form builder. Design templates with fillable field types types (Text, Date, Yes/No, Multiple Choice), and prompts. Fill form mode presents a questionnaire interface to populate all fields at once. Useful for template documents such as M&A NDAs.";
+                case "btnFormEditor": return "Opens the form builder. Design templates with fillable field types (Text, Date, Yes/No, Multiple Choice), and prompts. Fill form mode presents a questionnaire interface to populate all fields at once. Useful for template documents such as M&A NDAs.";
                 case "btnDocCompare": return "Compare two versions of DOCX, DOC or PDF files and generate outputs with tracked changes / redlines.";
                 case "btnSmartEyeDrop": return "Captures colors from anywhere on screen to dynamically modify fill, outline, and font colors. Click to pick a color and automatically apply it to the selected shape's fill or outline.";
                 case "btnNumberToWords": return "Converts numeric values to written words with original number in parentheses. Works on selected text (converts all numbers found) or at cursor position (converts nearest number). Example: '123' becomes 'one hundred twenty-three (123)'.";

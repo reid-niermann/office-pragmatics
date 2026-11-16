@@ -257,7 +257,7 @@
     <Compile Include="Classes\Chart\ChartUtility.cs" />
     <Compile Include="Classes\Color\ColorUtility.cs" />
     <Compile Include="Classes\Color\CustomColorManager.cs" />
-    <Compile Include="Classes\ExcelLinking\WorkbookCache.cs.cs" />
+    <Compile Include="Classes\ExcelLinking\WorkbookCache.cs" />
     <Compile Include="Classes\ExcelLinking\PerformanceHelpers.cs" />
     <Compile Include="Classes\ExcelLinking\ChartLinkUtility.cs" />
     <Compile Include="Classes\ExcelLinking\SizeModeUtil.cs" />
