@@ -1,0 +1,604 @@
+﻿<Project ToolsVersion="17.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!--
+    This section defines project-level properties.
+
+    AssemblyName
+      Name of the output assembly.
+    Configuration
+      Specifies a default value for debug.
+    OutputType
+      Must be "Library" for VSTO.
+    Platform
+      Specifies what CPU the output of this project can run on.
+    NoStandardLibraries
+      Set to "false" for VSTO.
+    RootNamespace
+      In C#, this specifies the namespace given to new files. In VB, all objects are
+      wrapped in this namespace at runtime.
+  -->
+  <PropertyGroup>
+    <ProjectTypeGuids>{BAA0C2D2-18E2-41B9-852F-F413020CAA33};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C707C6EF-C79E-467B-904E-2E489D2B9990}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <RootNamespace>OfficePragmatics_Powerpoint</RootNamespace>
+    <AssemblyName>Office Pragmatics PowerPoint</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <DefineConstants>VSTO40;UseOfficeInterop</DefineConstants>
+    <ResolveComReferenceSilent>true</ResolveComReferenceSilent>
+    <IsWebBootstrapper>False</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <PublishUrl>publish\</PublishUrl>
+    <InstallUrl />
+    <TargetCulture>en</TargetCulture>
+    <ApplicationVersion>1.0.0.17</ApplicationVersion>
+    <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>days</UpdateIntervalUnits>
+    <ProductName>Office Pragmatics PowerPoint</ProductName>
+    <PublisherName>Office Pragmatics LLC</PublisherName>
+    <SupportUrl />
+    <FriendlyName>Office Pragmatics PowerPoint</FriendlyName>
+    <OfficeApplicationDescription />
+    <LoadBehavior>3</LoadBehavior>
+  </PropertyGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.VSTORuntime.4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft Visual Studio 2010 Tools for Office Runtime %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <PropertyGroup>
+    <!--
+      OfficeApplication
+        Add-in host application
+    -->
+    <OfficeApplication>PowerPoint</OfficeApplication>
+  </PropertyGroup>
+  <!--
+    This section defines properties that are set when the "Debug" configuration is selected.
+
+    DebugSymbols
+      If "true", create symbols (.pdb). If "false", do not create symbols.
+    DefineConstants
+      Constants defined for the preprocessor.
+    EnableUnmanagedDebugging
+      If "true", starting the debugger will attach both managed and unmanaged debuggers.
+    Optimize
+      If "true", optimize the build output. If "false", do not optimize.
+    OutputPath
+      Output path of project relative to the project file.
+    WarningLevel
+      Warning level for the compiler.
+  -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!--
+    This section defines properties that are set when the "Release" configuration is selected.
+
+    DebugSymbols
+      If "true", create symbols (.pdb). If "false", do not create symbols.
+    DefineConstants
+      Constants defined for the preprocessor.
+    EnableUnmanagedDebugging
+      If "true", starting the debugger will attach both managed and unmanaged debuggers.
+    Optimize
+      If "true", optimize the build output. If "false", do not optimize.
+    OutputPath
+      Output path of project relative to the project file.
+    WarningLevel
+      Warning level for the compiler.
+  -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!--
+    This section specifies references for the project.
+  -->
+  <ItemGroup>
+    <Reference Include="Accessibility" />
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.10, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.10\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SkiaSharp, Version=3.119.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkiaSharp.3.119.0\lib\net462\SkiaSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Pipelines, Version=9.0.0.10, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Pipelines.9.0.10\lib\net462\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Json, Version=9.0.0.10, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.Json.9.0.10\lib\net462\System.Net.Http.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Text.Encodings.Web, Version=9.0.0.10, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.9.0.10\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=9.0.0.10, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.9.0.10\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Tools.Applications.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Tools.Common.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="$([System.String]::Copy(&quot;;$(DefineConstants);&quot;).ToLower().Contains(';useofficeinterop;')) or $([System.String]::Copy(&quot;,$(DefineConstants),&quot;).ToLower().Contains(',useofficeinterop,'))">
+      <ItemGroup>
+        <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+          <Private>False</Private>
+          <EmbedInteropTypes>true</EmbedInteropTypes>
+        </Reference>
+        <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+          <Private>False</Private>
+          <EmbedInteropTypes>True</EmbedInteropTypes>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <COMReference Include="Microsoft.Office.Core">
+          <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+          <VersionMajor>2</VersionMajor>
+          <VersionMinor>7</VersionMinor>
+          <Lcid>0</Lcid>
+          <WrapperTool>tlbimp</WrapperTool>
+          <Isolated>False</Isolated>
+          <EmbedInteropTypes>true</EmbedInteropTypes>
+        </COMReference>
+        <COMReference Include="Microsoft.Office.Interop.PowerPoint">
+          <Guid>{91493440-5A91-11CF-8700-00AA0060263B}</Guid>
+          <VersionMajor>2</VersionMajor>
+          <VersionMinor>11</VersionMinor>
+          <Lcid>0</Lcid>
+          <WrapperTool>tlbimp</WrapperTool>
+          <Isolated>False</Isolated>
+          <EmbedInteropTypes>true</EmbedInteropTypes>
+        </COMReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <!--
+    This section defines the user source files that are part of the project.
+     
+    A "Compile" element specifies a source file to compile.
+    An "EmbeddedResource" element specifies an .resx file for embedded resources.
+    A "None" element specifies a file that is not to be passed to the compiler (for instance, 
+    a text file or XML file).
+    The "AppDesigner" element specifies the directory where the application properties files
+    can be found.
+  -->
+  <ItemGroup>
+    <Compile Include="Classes\Alignment\AlignmentHelper.cs" />
+    <Compile Include="Classes\Chart\ChartUtility.cs" />
+    <Compile Include="Classes\Color\ColorUtility.cs" />
+    <Compile Include="Classes\Color\CustomColorManager.cs" />
+    <Compile Include="Classes\ExcelLinking\WorkbookCache.cs.cs" />
+    <Compile Include="Classes\ExcelLinking\PerformanceHelpers.cs" />
+    <Compile Include="Classes\ExcelLinking\ChartLinkUtility.cs" />
+    <Compile Include="Classes\ExcelLinking\SizeModeUtil.cs" />
+    <Compile Include="Classes\ExcelLinking\LinkManager.cs" />
+    <Compile Include="Classes\ExcelLinking\RangeLinkUtility.cs" />
+    <Compile Include="Classes\ExcelLinking\UpdateLinks.cs" />
+    <Compile Include="Classes\ExcelLinking\TextLinkUtility.cs" />
+    <Compile Include="Classes\File\Export.cs" />
+    <Compile Include="Classes\File\FileUtility.cs" />
+    <Compile Include="Classes\Image\IconUtility.cs" />
+    <Compile Include="Classes\Image\ImageUtility.cs" />
+    <Compile Include="Classes\Image\LogoUtility.cs" />
+    <Compile Include="Classes\Library\LibraryUtility.cs" />
+    <Compile Include="Classes\Map\MapUtility.cs" />
+    <Compile Include="Classes\Settings\ApiKeys.cs" />
+    <Compile Include="Classes\Settings\SettingsManager.cs" />
+    <Compile Include="Classes\Shape\ColorDropperUtility.cs" />
+    <Compile Include="Classes\Shape\MeasureMove.cs" />
+    <Compile Include="Classes\Shape\ShapeUtility.cs" />
+    <Compile Include="Classes\Size\SizeHelper.cs" />
+    <Compile Include="Classes\Slide\GoToFile.cs" />
+    <Compile Include="Classes\Slide\Redaction.cs" />
+    <Compile Include="Classes\Slide\SlideUtility.cs" />
+    <Compile Include="Classes\Text\TextUtility.cs" />
+    <Compile Include="Classes\Utilities\Utility.cs" />
+    <Compile Include="Classes\_Core\RibbonController.cs" />
+    <Compile Include="Classes\_Core\PragmaticsUI.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="OfficePragmatics Powerpoint_TemporaryKey.pfx" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Ribbon1.cs" />
+    <Compile Include="ThisAddIn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="ThisAddIn.Designer.xml">
+      <DependentUpon>ThisAddIn.cs</DependentUpon>
+    </None>
+    <Compile Include="ThisAddIn.Designer.cs">
+      <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
+    </Compile>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Ribbon1.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Excel PIA (same as the Excel add-in) instead of COM references, so the project
+         builds on machines without Office installed. Office core comes from the
+         UseOfficeInterop block above; VBIDE was unused. -->
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <Private>False</Private>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TBU.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_AltFind.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_chartChartImport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_Copy_Path.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_Duplicate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_Move.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_pictureChartImport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_RatioResize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_Rotation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_Show_Explorer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_vectorChartImport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignBottom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignCenter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignHorizontal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignLeft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignMiddle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignRight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignTogether.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignTop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignVertical.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlphabetize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAltTextSnap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAutoGrid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAutoSelect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnCellCenter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnCenterPie.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnConformEdges.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnCopyData.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnCustomColors.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnCycleSwap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnExtendBottom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnExtendLeft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnExtendRight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnExtendTop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnFitHorz.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnFitVert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnFlattenColors.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnFootnote.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnImportText.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnInsertIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnInsertLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnLibrary.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnLineDown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnLineUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnLinkManager.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnMaximize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnMove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnPasteFormat.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnPlotMap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRedaction.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRefreshLinks.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRemoveWhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnResizeLogos.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSameHeight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSameHW.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSameWidth.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSaveAsPDF.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSelectExport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSettings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnShapesToAxis.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSlideHop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSmartEyeDrop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnTBUBox.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnToggleAutofit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnVersionUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnZeroMargin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galFileTools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galImportChart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galImportTable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galImportText.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galPitchOther.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_QAT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Continental_US_Map.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Pragmatics.ico" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>OfficePragmatics Powerpoint_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>24500F05D5098169A3592F047F1A0787772B6145</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Pragmatics.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup />
+  <!-- Include the build rules for a C# project. -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Include additional build rules for an Office application add-in. -->
+  <Import Project="$(VSToolsPath)\OfficeTools\Microsoft.VisualStudio.Tools.Office.targets" Condition="'$(VSToolsPath)' != ''" />
+  <!-- This section defines VSTO properties that describe the host-changeable project properties. -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
+        <ProjectProperties HostName="PowerPoint" HostPackage="{29A7B9D7-A7F1-4328-8EF0-6B2D1A56B2C1}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="PowerPoint" Language="cs" TemplatesPath="" DebugInfoExeName="#Software\Microsoft\Office\16.0\PowerPoint\InstallRoot\Path#powerpnt.exe" AddItemTemplatesGuid="{51063C3A-E220-4D12-8922-BDA915ACD783}" />
+        <Host Name="PowerPoint" GeneratedCodeNamespace="OfficePragmatics_Powerpoint" PublishedHash="69C324AB27932AA2FBF2B7EA72250886FF164DE6" IconIndex="0">
+          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" PublishedHash="19D07BDB2BD5827783AF110289CD47CBB762B26B" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
+        </Host>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="..\packages\SkiaSharp.NativeAssets.macOS.3.119.0\build\net462\SkiaSharp.NativeAssets.macOS.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.macOS.3.119.0\build\net462\SkiaSharp.NativeAssets.macOS.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\SkiaSharp.NativeAssets.macOS.3.119.0\build\net462\SkiaSharp.NativeAssets.macOS.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.NativeAssets.macOS.3.119.0\build\net462\SkiaSharp.NativeAssets.macOS.targets'))" />
+    <Error Condition="!Exists('..\packages\SkiaSharp.NativeAssets.Win32.3.119.0\build\net462\SkiaSharp.NativeAssets.Win32.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.NativeAssets.Win32.3.119.0\build\net462\SkiaSharp.NativeAssets.Win32.targets'))" />
+  </Target>
+  <Import Project="..\packages\SkiaSharp.NativeAssets.Win32.3.119.0\build\net462\SkiaSharp.NativeAssets.Win32.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.Win32.3.119.0\build\net462\SkiaSharp.NativeAssets.Win32.targets')" />
+</Project>
