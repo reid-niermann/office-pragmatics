@@ -330,9 +330,9 @@ namespace OfficePragmatics_Powerpoint
                 case "btnAutoGrid": return "Arranges selected shapes into a tidy grid layout. Automatically calculates optimal rows and columns for the selection.";
                 case "btnCellCenter": return "Centers selected shapes within their respective grid cells. Useful for aligning shapes to invisible gridlines or guides.";
                 // Graphics
-                case "btnInsertIcon": return "Search and insert svg icons from a built-in library (able to be recolored natively). Icons will appear immediately to the right of the active slide.";
+                case "btnInsertIcon": return "Search Freepik for SVG icons and insert them; they can be recolored like any PowerPoint shape. Icons appear immediately to the right of the active slide. Requires a Freepik API key in Settings > API Keys.";
                 case "btnInsertLogo": return "Search and insert logos from the web with automatic harmonization and sizing. Logos will appear immediately to the right of the active slide.";
-                case "btnPlotMap": return "Inserts svg map of the continential U.S. based on provided list of locations. Useful for plotting locations within PowerPoint. Custom plot markers can be applied (based on the active shape prior to function activation).";
+                case "btnPlotMap": return "Inserts svg map of the continental U.S. based on provided list of locations. Useful for plotting locations within PowerPoint. Custom plot markers can be applied (based on the active shape prior to function activation).";
                 case "btnAlphabetize": return "Sorts selected logo images alphabetically, while maintaining original spacing and alignment. Sorting function based on alternative text while is added through out Insert Logo tool. Logos added to the presentation manually will need to be reviewed for alternative text.";
                 case "btnRemoveWhite": return "Removes white backgrounds from selected images. Converts white pixels to transparent, useful for cleaning up imported graphics.";
                 case "btnResizeLogos": return "Harmonizes logo sizes across selection. Resizes logos proportionally based on their visual area to create balanced compositions.";

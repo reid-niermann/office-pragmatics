@@ -5,7 +5,7 @@ VisualStudioVersion = 18.3.11206.111
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Excel", "Excel\Excel.csproj", "{CC73B27B-3807-4A48-B8BF-02225B5CAE81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerPoint", "Powerpoint\PowerPoint.csproj", "{C707C6EF-C79E-467B-904E-2E489D2B9990}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerPoint", "PowerPoint\PowerPoint.csproj", "{C707C6EF-C79E-467B-904E-2E489D2B9990}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Word", "Word\Word.csproj", "{D7C92052-5BB2-4A46-A2AD-3C39E8EBBFA7}"
 EndProject

@@ -418,14 +418,14 @@ namespace OfficePragmatics_Excel
                 case "btnRemoveAllTracePrecedentArrows": baseSupertip = "Clears all precedent and dependent arrows from the active worksheet."; break;
                 case "btnDrillDependents": baseSupertip = "Draws dependent arrows for all dependent cells for the current selection, providing enhanced visibility beyond Excel's standard single arrow tracing."; break;
                 case "btnRemoveAllTraceDependentArrows": baseSupertip = "Clears all precedent and dependent arrows from the active worksheet."; break;
-                case "b_Magnitude_Plus": baseSupertip = "Increases the selected cell by three orders of magnitude (i.e., multiplys the range values/formulas by 1,000). Useful for changing the scale of data quickly."; break;
+                case "b_Magnitude_Plus": baseSupertip = "Increases the selected cell by three orders of magnitude (i.e., multiplies the range values/formulas by 1,000). Useful for changing the scale of data quickly."; break;
                 case "b_Magnitude_Minus": baseSupertip = "Decreases the selected cell by three orders of magnitude (i.e., multiplies the range values/formulas by 0.001). Useful for changing the scale of data quickly."; break;
                 case "b_FlipSign": baseSupertip = "Flips the outputs sign of the current selection (i.e, multiplies the range values/formulas by -1). Positive outputs will become negative and negative outputs will become positive in the selected range."; break;
                 case "b_FillRight": baseSupertip = "Takes the selected cell's formula, and intelligently copies that cell to the right based on relative worksheet context and expected user intent."; break;
                 case "b_FillDown": baseSupertip = "Takes the selected cell's formula, and intelligently copies that cell down based on relative worksheet context and expected user intent."; break;
                 case "b_ErrorWrapNA": baseSupertip = "Wraps the selected cell(s) inside IFERROR function(s) to return NA on error as text, rather than #N/A"; break;
                 case "b_ErrorWrapZero": baseSupertip = "Wraps the selected cell(s) inside IFERROR function(s) to return the value 0 on error, rather than #N/A"; break;
-                case "b_ConvertToLet": baseSupertip = "Converts complex formulas with repeative cell references to use the LET function for better readability and performance with intermediate variables."; break;
+                case "b_ConvertToLet": baseSupertip = "Converts complex formulas with repetitive cell references to use the LET function for better readability and performance with intermediate variables."; break;
                 case "b_FormulaWrap": baseSupertip = "Adds specified text to front and back of all formulas in the selected range. Enables insertion of a new wrapping formula without multi-step find and replace workarounds."; break;
                 case "b_SolveFormula": baseSupertip = "Replaces select formulas with direct links to the resulting cells for auditing and analysis. Built for XLOOKUP, VLOOKUP, HLOOKUP, INDEX, MATCH, MIN, MAX, CHOOSE, TRANSPOSE, SUMIF, SUMIFS, INDIRECT, OFFSET"; break;
                 case "b_AnchorCycle": baseSupertip = "Cycles through reference types (relative, absolute, mixed) for cell references in formulas. Quickly change A1 to $A$1 to $A1 to A$1."; break;
@@ -436,9 +436,9 @@ namespace OfficePragmatics_Excel
                 case "b_pasteBorders": baseSupertip = "Paste only the cell broders from copied cells, preserving formulas and all other formatting."; break;
                 case "b_pasteCellWidths": baseSupertip = "Paste column widths from copied cells."; break;
                 case "b_pasteCellHeights": baseSupertip = "Paste row heights from copied cells."; break;
-                case "btnBrandFormat": baseSupertip = "Automatically applys brand formatting to selected cell ranges or charts."; break;
-                case "btnChartBrandFormat": baseSupertip = "Applys default company brand forzmat to a selected chart. Use the import function within Office Pragmatics settings on the Charts tab to set an actively chart as the default company format."; break;
-                case "btnTableBrandFormat": baseSupertip = "Applys default company brand format to a selected cell range. Use the import function within Office Pragmatics settings on the Tables tab to set an active range as the default company format."; break;
+                case "btnBrandFormat": baseSupertip = "Automatically applies brand formatting to selected cell ranges or charts."; break;
+                case "btnChartBrandFormat": baseSupertip = "Applies the default company brand format to a selected chart. Use the import function within Office Pragmatics settings on the Charts tab to set the active chart as the default company format."; break;
+                case "btnTableBrandFormat": baseSupertip = "Applies the default company brand format to a selected cell range. Use the import function within Office Pragmatics settings on the Tables tab to set an active range as the default company format."; break;
                 case "btnBrandFillCycle": baseSupertip = "Cycles through the company's primary colors and applies to the selected range's fill color. Company colors can be set in the Office Pragmatics settings menu under the Colors tab."; break;
                 case "btnBrandBorderCycle": baseSupertip = "Cycles through the company's primary colors and applies to the selected range's border color. Company colors can be set in the Office Pragmatics settings menu under the Colors tab."; break;
                 case "btnBrandFontColorCycle": baseSupertip = "Cycles through the company's primary colors and applies to the selected range's font color. Company colors can be set in the Office Pragmatics settings menu under the Colors tab."; break;
@@ -452,8 +452,8 @@ namespace OfficePragmatics_Excel
                 case "b_MinusDecimals": baseSupertip = "Decreases the number of decimal places displayed in the selected cell range. Useful for simplifying numerical data presentation."; break;
                 case "b_BBColorCycle": baseSupertip = "Cycles through the two primary font colors used in financial modeling: blue (inputs), black (calculations)."; break;
                 case "b_ModelColorCycle": baseSupertip = "Cycles through standard font colors used in financial modeling: blue (inputs), black (calculations), green (references to other worksheets), red (references to other workbooks), purple (links to other data providers)."; break;
-                case "b_AutoColorSelection": baseSupertip = "Automatically applys appropriate standard financial modeling font colors based on cell content type: blue (inputs), black (calculations), green (references to other worksheets), red (references to other workbooks), purple (links to other data providers)."; break;
-                case "b_AutoTableColor": baseSupertip = "Automatically applys alternating row colors for a selected range to create a professional table appearance."; break;
+                case "b_AutoColorSelection": baseSupertip = "Automatically applies appropriate standard financial modeling font colors based on cell content type: blue (inputs), black (calculations), green (references to other worksheets), red (references to other workbooks), purple (links to other data providers)."; break;
+                case "b_AutoTableColor": baseSupertip = "Automatically applies alternating row colors for a selected range to create a professional table appearance."; break;
 
                 // Fill color cycles
                 case "b_ModelFillColorCycle": baseSupertip = "Cycles through standard model fill colors (pale yellow for inputs, light blue, light red, light gray, white, then transparent) and applies the selection's interior accordingly. Useful for quickly highlighting inputs and structure consistently across a model."; break;

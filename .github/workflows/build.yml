@@ -50,7 +50,7 @@ jobs:
       - name: Restore NuGet packages
         shell: pwsh
         run: |
-          foreach ($cfg in 'Excel\packages.config', 'Word\packages.config', 'Powerpoint\packages.config') {
+          foreach ($cfg in 'Excel\packages.config', 'Word\packages.config', 'PowerPoint\packages.config') {
             nuget restore $cfg -PackagesDirectory packages -NonInteractive
             if ($LASTEXITCODE) { exit $LASTEXITCODE }
           }
@@ -58,7 +58,7 @@ jobs:
       - name: Build add-ins
         shell: pwsh
         run: |
-          foreach ($proj in 'Excel\Excel.csproj', 'Powerpoint\PowerPoint.csproj', 'Word\Word.csproj') {
+          foreach ($proj in 'Excel\Excel.csproj', 'PowerPoint\PowerPoint.csproj', 'Word\Word.csproj') {
             msbuild $proj /nologo /v:minimal /p:Configuration=Release /p:Platform=AnyCPU `
               /p:ManifestCertificateThumbprint=$env:MANIFEST_CERT_THUMBPRINT /p:ManifestKeyFile=
             if ($LASTEXITCODE) { exit $LASTEXITCODE }
