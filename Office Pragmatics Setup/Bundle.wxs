@@ -1,0 +1,10 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:bal="http://wixtoolset.org/schemas/v4/wxs/bal">
+  <Bundle Id="OfficePragmatics.Setup" UpgradeCode="{C636176F-4CB7-4FD6-A408-A0AFCB189051}" Name="Office Pragmatics" Manufacturer="Office Pragmatics LLC" Version="1.0.0.86" IconSourceFile="Pragmatics Logo.ico" Compressed="yes">
+    <BootstrapperApplication>
+      <bal:WixStandardBootstrapperApplication Theme="hyperlinkLicense" ThemeFile="RtfBanner.theme.xml" LicenseUrl="" LogoFile="Pragmatics Logo_v3.png" ShowVersion="yes" SuppressOptionsUI="yes" />
+    </BootstrapperApplication>
+    <Chain>
+      <MsiPackage Id="OfficePragmaticsMainPackage" SourceFile="..\Installer\bin\x64\Release\en-US\Office Pragmatics Installer.msi" DisplayName="Office Pragmatics Application" Compressed="yes" Description="Main Office Pragmatics application components" />
+    </Chain>
+  </Bundle>
+</Wix>

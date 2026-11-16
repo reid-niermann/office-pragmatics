@@ -1,0 +1,198 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Fragment>
+		<!-- Excel Components -->
+		<ComponentGroup Id="ExcelComponents" Directory="EXCELFOLDER">
+			<Component Id="Excel_vsto_Component">
+				<File Id="Excel_vsto" KeyPath="yes"
+					  Name="Office Pragmatics Excel.vsto" Source="$(var.ExcelAddinFiles)Office Pragmatics Excel.vsto" />
+			</Component>
+			<Component Id="Excel_dll_manifest_Component">
+				<File Id="Excel_dll_manifest" KeyPath="yes"
+					  Name="Office Pragmatics Excel.dll.manifest" Source="$(var.ExcelAddinFiles)Office Pragmatics Excel.dll.manifest" />
+			</Component>
+			<Component Id="Excel_dll_Component">
+				<File Id="Excel_dll" KeyPath="yes"
+					  Name="Office Pragmatics Excel.dll" Source="$(var.ExcelAddinFiles)Office Pragmatics Excel.dll" />
+			</Component>
+			<Component Id="Excel_config_Component">
+				<File Id="Excel_config" KeyPath="yes"
+					  Name="Office Pragmatics Excel.dll.config" Source="$(var.ExcelAddinFiles)Office Pragmatics Excel.dll.config" />
+			</Component>
+			<Component Id="Excel_MSOfficeToolsCommon_dll_Component">
+				<File Id="Excel_MSOfficeToolsCommon_dll" KeyPath="yes"
+					  Name="Microsoft.Office.Tools.Common.v4.0.Utilities.dll"
+					  Source="$(var.ExcelAddinFiles)Microsoft.Office.Tools.Common.v4.0.Utilities.dll" />
+			</Component>
+			<Component Id="Excel_ClosedXML_Component">
+				<File Id="Excel_ClosedXML" KeyPath="yes"
+					  Name="ClosedXML.dll" Source="$(var.ExcelAddinFiles)ClosedXML.dll" />
+			</Component>
+			<Component Id="Excel_ClosedXML_Parser_Component">
+				<File Id="Excel_ClosedXML_Parser" KeyPath="yes"
+					  Name="ClosedXML.Parser.dll" Source="$(var.ExcelAddinFiles)ClosedXML.Parser.dll" />
+			</Component>
+			<Component Id="Excel_DocumentFormat_OpenXml_Component">
+				<File Id="Excel_DocumentFormat_OpenXml" KeyPath="yes"
+					  Name="DocumentFormat.OpenXml.dll" Source="$(var.ExcelAddinFiles)DocumentFormat.OpenXml.dll" />
+			</Component>
+			<Component Id="Excel_DocumentFormat_OpenXml_Framework_Component">
+				<File Id="Excel_DocumentFormat_OpenXml_Framework" KeyPath="yes"
+					  Name="DocumentFormat.OpenXml.Framework.dll" Source="$(var.ExcelAddinFiles)DocumentFormat.OpenXml.Framework.dll" />
+			</Component>
+			<Component Id="Excel_ExcelNumberFormat_Component">
+				<File Id="Excel_ExcelNumberFormat" KeyPath="yes"
+					  Name="ExcelNumberFormat.dll" Source="$(var.ExcelAddinFiles)ExcelNumberFormat.dll" />
+			</Component>
+			<Component Id="Excel_Newtonsoft_Json_Component">
+				<File Id="Excel_Newtonsoft_Json" KeyPath="yes"
+					  Name="Newtonsoft.Json.dll" Source="$(var.ExcelAddinFiles)Newtonsoft.Json.dll" />
+			</Component>
+			<Component Id="Excel_RBush_Component">
+				<File Id="Excel_RBush" KeyPath="yes"
+					  Name="RBush.dll" Source="$(var.ExcelAddinFiles)RBush.dll" />
+			</Component>
+			<Component Id="Excel_SixLabors_Fonts_Component">
+				<File Id="Excel_SixLabors_Fonts" KeyPath="yes"
+					  Name="SixLabors.Fonts.dll" Source="$(var.ExcelAddinFiles)SixLabors.Fonts.dll" />
+			</Component>
+			<Component Id="Excel_Microsoft_Bcl_HashCode_Component">
+				<File Id="Excel_Microsoft_Bcl_HashCode" KeyPath="yes"
+					  Name="Microsoft.Bcl.HashCode.dll" Source="$(var.ExcelAddinFiles)Microsoft.Bcl.HashCode.dll" />
+			</Component>
+			<Component Id="Excel_System_Buffers_Component">
+				<File Id="Excel_System_Buffers" KeyPath="yes"
+					  Name="System.Buffers.dll" Source="$(var.ExcelAddinFiles)System.Buffers.dll" />
+			</Component>
+			<Component Id="Excel_System_Memory_Component">
+				<File Id="Excel_System_Memory" KeyPath="yes"
+					  Name="System.Memory.dll" Source="$(var.ExcelAddinFiles)System.Memory.dll" />
+			</Component>
+			<Component Id="Excel_System_Numerics_Vectors_Component">
+				<File Id="Excel_System_Numerics_Vectors" KeyPath="yes"
+					  Name="System.Numerics.Vectors.dll" Source="$(var.ExcelAddinFiles)System.Numerics.Vectors.dll" />
+			</Component>
+			<Component Id="Excel_System_Runtime_CompilerServices_Unsafe_Component">
+				<File Id="Excel_System_Runtime_CompilerServices_Unsafe" KeyPath="yes"
+					  Name="System.Runtime.CompilerServices.Unsafe.dll" Source="$(var.ExcelAddinFiles)System.Runtime.CompilerServices.Unsafe.dll" />
+			</Component>
+			<Component Id="Excel_System_Threading_Tasks_Extensions_Component">
+				<File Id="Excel_System_Threading_Tasks_Extensions" KeyPath="yes"
+					  Name="System.Threading.Tasks.Extensions.dll" Source="$(var.ExcelAddinFiles)System.Threading.Tasks.Extensions.dll" />
+			</Component>
+		</ComponentGroup>
+
+		<!-- PowerPoint Components -->
+		<ComponentGroup Id="PowerPointComponents" Directory="POWERPOINTFOLDER">
+			<Component Id="PowerPoint_vsto_Component">
+				<File Id="PowerPoint_vsto" KeyPath="yes"
+					  Name="Office Pragmatics PowerPoint.vsto" Source="$(var.PowerPointAddinFiles)Office Pragmatics PowerPoint.vsto" />
+			</Component>
+			<Component Id="PowerPoint_dll_manifest_Component">
+				<File Id="PowerPoint_dll_manifest" KeyPath="yes"
+					  Name="Office Pragmatics PowerPoint.dll.manifest" Source="$(var.PowerPointAddinFiles)Office Pragmatics PowerPoint.dll.manifest" />
+			</Component>
+			<Component Id="PowerPoint_dll_Component">
+				<File Id="PowerPoint_dll" KeyPath="yes"
+					  Name="Office Pragmatics PowerPoint.dll" Source="$(var.PowerPointAddinFiles)Office Pragmatics PowerPoint.dll" />
+			</Component>
+			<Component Id="PowerPoint_config_Component">
+				<File Id="PowerPoint_config" KeyPath="yes"
+					  Name="Office Pragmatics PowerPoint.dll.config" Source="$(var.PowerPointAddinFiles)Office Pragmatics PowerPoint.dll.config" />
+			</Component>
+			<Component Id="PowerPoint_MSOfficeToolsCommon_dll_Component">
+				<File Id="PowerPoint_MSOfficeToolsCommon_dll" KeyPath="yes"
+					  Name="Microsoft.Office.Tools.Common.v4.0.Utilities.dll"
+					  Source="$(var.PowerPointAddinFiles)Microsoft.Office.Tools.Common.v4.0.Utilities.dll" />
+			</Component>
+			<Component Id="PowerPoint_Newtonsoft_Json_Component">
+				<File Id="PowerPoint_Newtonsoft_Json" KeyPath="yes"
+					  Name="Newtonsoft.Json.dll" Source="$(var.PowerPointAddinFiles)Newtonsoft.Json.dll" />
+			</Component>
+			<Component Id="PowerPoint_SkiaSharp_Component">
+				<File Id="PowerPoint_SkiaSharp" KeyPath="yes"
+					  Name="SkiaSharp.dll" Source="$(var.PowerPointAddinFiles)SkiaSharp.dll" />
+			</Component>
+			<Component Id="PowerPoint_System_Buffers_Component">
+				<File Id="PowerPoint_System_Buffers" KeyPath="yes"
+					  Name="System.Buffers.dll" Source="$(var.PowerPointAddinFiles)System.Buffers.dll" />
+			</Component>
+			<Component Id="PowerPoint_System_Memory_Component">
+				<File Id="PowerPoint_System_Memory" KeyPath="yes"
+					  Name="System.Memory.dll" Source="$(var.PowerPointAddinFiles)System.Memory.dll" />
+			</Component>
+			<Component Id="PowerPoint_System_Numerics_Vectors_Component">
+				<File Id="PowerPoint_System_Numerics_Vectors" KeyPath="yes"
+					  Name="System.Numerics.Vectors.dll" Source="$(var.PowerPointAddinFiles)System.Numerics.Vectors.dll" />
+			</Component>
+			<Component Id="PowerPoint_System_Runtime_CompilerServices_Unsafe_Component">
+				<File Id="PowerPoint_System_Runtime_CompilerServices_Unsafe" KeyPath="yes"
+					  Name="System.Runtime.CompilerServices.Unsafe.dll" Source="$(var.PowerPointAddinFiles)System.Runtime.CompilerServices.Unsafe.dll" />
+			</Component>
+			<Component Id="PowerPoint_Microsoft_Bcl_AsyncInterfaces_Component">
+				<File Id="PowerPoint_Microsoft_Bcl_AsyncInterfaces" KeyPath="yes"
+					  Name="Microsoft.Bcl.AsyncInterfaces.dll" Source="$(var.PowerPointAddinFiles)Microsoft.Bcl.AsyncInterfaces.dll" />
+			</Component>
+			<Component Id="PowerPoint_System_IO_Pipelines_Component">
+				<File Id="PowerPoint_System_IO_Pipelines" KeyPath="yes"
+					  Name="System.IO.Pipelines.dll" Source="$(var.PowerPointAddinFiles)System.IO.Pipelines.dll" />
+			</Component>
+			<Component Id="PowerPoint_System_Net_Http_Json_Component">
+				<File Id="PowerPoint_System_Net_Http_Json" KeyPath="yes"
+					  Name="System.Net.Http.Json.dll" Source="$(var.PowerPointAddinFiles)System.Net.Http.Json.dll" />
+			</Component>
+			<Component Id="PowerPoint_System_Text_Encodings_Web_Component">
+				<File Id="PowerPoint_System_Text_Encodings_Web" KeyPath="yes"
+					  Name="System.Text.Encodings.Web.dll" Source="$(var.PowerPointAddinFiles)System.Text.Encodings.Web.dll" />
+			</Component>
+			<Component Id="PowerPoint_System_Text_Json_Component">
+				<File Id="PowerPoint_System_Text_Json" KeyPath="yes"
+					  Name="System.Text.Json.dll" Source="$(var.PowerPointAddinFiles)System.Text.Json.dll" />
+			</Component>
+			<Component Id="PowerPoint_System_Threading_Tasks_Extensions_Component">
+				<File Id="PowerPoint_System_Threading_Tasks_Extensions" KeyPath="yes"
+					  Name="System.Threading.Tasks.Extensions.dll" Source="$(var.PowerPointAddinFiles)System.Threading.Tasks.Extensions.dll" />
+			</Component>
+			<Component Id="PowerPoint_System_ValueTuple_Component">
+				<File Id="PowerPoint_System_ValueTuple" KeyPath="yes"
+					  Name="System.ValueTuple.dll" Source="$(var.PowerPointAddinFiles)System.ValueTuple.dll" />
+			</Component>
+			<Component Id="PowerPoint_libSkiaSharp_x64_Component" Directory="POWERPOINTFOLDER_X64">
+				<File Id="PowerPoint_libSkiaSharp_x64" KeyPath="yes"
+					  Name="libSkiaSharp.dll" Source="$(var.PowerPointAddinFiles)x64\libSkiaSharp.dll" />
+			</Component>
+			<Component Id="PowerPoint_libSkiaSharp_x86_Component" Directory="POWERPOINTFOLDER_X86">
+				<File Id="PowerPoint_libSkiaSharp_x86" KeyPath="yes"
+					  Name="libSkiaSharp.dll" Source="$(var.PowerPointAddinFiles)x86\libSkiaSharp.dll" />
+			</Component>
+		</ComponentGroup>
+
+		<!-- Word Components -->
+		<ComponentGroup Id="WordComponents" Directory="WORDFOLDER">
+			<Component Id="Word_vsto_Component">
+				<File Id="Word_vsto" KeyPath="yes"
+					  Name="Office Pragmatics Word.vsto" Source="$(var.WordAddinFiles)Office Pragmatics Word.vsto" />
+			</Component>
+			<Component Id="Word_dll_manifest_Component">
+				<File Id="Word_dll_manifest" KeyPath="yes"
+					  Name="Office Pragmatics Word.dll.manifest" Source="$(var.WordAddinFiles)Office Pragmatics Word.dll.manifest" />
+			</Component>
+			<Component Id="Word_dll_Component">
+				<File Id="Word_dll" KeyPath="yes"
+					  Name="Office Pragmatics Word.dll" Source="$(var.WordAddinFiles)Office Pragmatics Word.dll" />
+			</Component>
+			<Component Id="Word_MSOfficeToolsCommon_dll_Component">
+				<File Id="Word_MSOfficeToolsCommon_dll" KeyPath="yes"
+					  Name="Microsoft.Office.Tools.Common.v4.0.Utilities.dll"
+					  Source="$(var.WordAddinFiles)Microsoft.Office.Tools.Common.v4.0.Utilities.dll" />
+			</Component>
+			<Component Id="Word_config_Component">
+				<File Id="Word_config" KeyPath="yes"
+					  Name="Office Pragmatics Word.dll.config" Source="$(var.WordAddinFiles)Office Pragmatics Word.dll.config" />
+			</Component>
+			<Component Id="Word_Newtonsoft_Json_Component">
+				<File Id="Word_Newtonsoft_Json" KeyPath="yes"
+					  Name="Newtonsoft.Json.dll" Source="$(var.WordAddinFiles)Newtonsoft.Json.dll" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>

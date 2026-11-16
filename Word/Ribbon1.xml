@@ -1,0 +1,604 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui"
+  onLoad="Ribbon_Load">
+
+	<ribbon>
+		<tabs>
+			<tab
+			  id="tabPragmatics"
+			  getLabel="GetLabel"
+			  getKeytip="GetKeytip">
+
+				<!-- ═════════════ Alignment ═════════════ -->
+				<group
+				  id="grpAlignment"
+				  label="Alignment">
+
+					<button
+					  id="btnAlignLeft"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnAlignTop"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnAlignHorizontal"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnAlignRight"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnAlignBottom"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnAlignVertical"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnAlignCenter"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnAlignMiddle"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnAlignTogether"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+				</group>
+
+				<!-- ═════════════ Size and Position ═════════════ -->
+				<group
+				  id="grpSizePos"
+				  label="Size / Position">
+
+					<button
+					  id="btnSameHW"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnSameHeight"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnSameWidth"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnExtendTop"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnExtendBottom"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnExtendLeft"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnExtendRight"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnFitHorz"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnFitVert"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="b_RatioResize"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="b_Rotation"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnCycleSwap"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  size="large"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction" />
+
+					<button
+					  id="btnAutoGrid"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  size="large"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction" />
+
+					<button
+					  id="btnCellCenter"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  size="large"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction" />
+
+				</group>
+
+				<!-- ═════════════ Libraries ═════════════ -->
+				<group
+				  id="grpLibraries"
+				  label="Library">
+
+					<button
+					  id="btnLibrary"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  size="large"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction" />
+
+				</group>
+
+				<!-- ═════════════ Doc Tools ═════════════ -->
+				<group
+				  id="grpDocTools"
+				  label="Doc Tools">
+
+					<button
+					  id="btnDocCompare"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  size="large"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction" />
+
+					<button
+					  id="btnFormEditor"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  size="large"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction" />
+
+					<button
+					  id="btnSmartEyeDrop"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnNumberToWords"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnFlattenColors"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnLineUp"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnLineDown"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+				</group>
+
+				<!-- ═════════════ XLS Linking ═════════════ -->
+				<group id="grpXlsLink" label="XLS Linking">
+
+					<gallery
+					  id="galImportChart"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  size="normal"
+					  columns="1"
+					  rows="3"
+					  showLabel="false">
+
+						<button
+						  id="b_vectorChartImport"
+						  getLabel="GetLabel"
+						  getScreentip="GetScreentip"
+						  getSupertip="GetSupertip"
+						  getImage="GetCustomImage"
+						  onAction="OnUniversalAction"
+						  showLabel="false" />
+
+						<button
+						  id="b_chartChartImport"
+						  getLabel="GetLabel"
+						  getScreentip="GetScreentip"
+						  getSupertip="GetSupertip"
+						  getImage="GetCustomImage"
+						  onAction="OnUniversalAction"
+						  showLabel="false" />
+
+						<button
+						  id="b_pictureChartImport"
+						  getLabel="GetLabel"
+						  getScreentip="GetScreentip"
+						  getSupertip="GetSupertip"
+						  getImage="GetCustomImage"
+						  onAction="OnUniversalAction"
+						  showLabel="false" />
+
+					</gallery>
+
+					<gallery
+					  id="galImportTable"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  size="normal"
+					  columns="1"
+					  rows="2"
+					  showLabel="false">
+
+						<button
+						  id="b_pictureRangeImport"
+						  getLabel="GetLabel"
+						  getScreentip="GetScreentip"
+						  getSupertip="GetSupertip"
+						  getImage="GetCustomImage"
+						  onAction="OnUniversalAction"
+						  showLabel="false" />
+
+						<button
+						  id="b_tableRangeImport"
+						  getLabel="GetLabel"
+						  getScreentip="GetScreentip"
+						  getSupertip="GetSupertip"
+						  getImage="GetCustomImage"
+						  onAction="OnUniversalAction"
+						  showLabel="false" />
+
+					</gallery>
+
+					<gallery
+					  id="galImportText"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  size="normal"
+					  columns="1"
+					  rows="1"
+					  showLabel="false">
+
+						<button
+						  id="btnImportText"
+						  getLabel="GetLabel"
+						  getKeytip="GetKeytip"
+						  getScreentip="GetScreentip"
+						  getSupertip="GetSupertip"
+						  getImage="GetCustomImage"
+						  onAction="OnUniversalAction"
+						  showLabel="false" />
+
+					</gallery>
+
+					<button
+					  id="btnLinkManager"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnRefreshLinks"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+				</group>
+
+				<!-- ═════════════ Page ═════════════ -->
+				<group
+				  id="grpPage"
+				  label="Page">
+
+					<button
+					  id="btnPageHop"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  size="large"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction" />
+
+				</group>
+
+				<!-- ═════════════ File ═════════════ -->
+				<group
+				  id="grpFile"
+				  label="File">
+
+					<button
+					  id="btnVersionUp"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnSaveAsPDF"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<button
+					  id="btnSelectExport"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+					<gallery
+					  id="galFileTools"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  columns="1"
+					  rows="3"
+					  getImage="GetCustomImage"
+					  size="normal"
+					  showLabel="false">
+
+						<button
+						  id="b_Show_Explorer"
+						  getLabel="GetLabel"
+						  getScreentip="GetScreentip"
+						  getSupertip="GetSupertip"
+						  getImage="GetCustomImage"
+						  onAction="OnUniversalAction"
+						  showLabel="false" />
+
+						<button
+						  id="b_Copy_Path"
+						  getLabel="GetLabel"
+						  getScreentip="GetScreentip"
+						  getSupertip="GetSupertip"
+						  getImage="GetCustomImage"
+						  onAction="OnUniversalAction"
+						  showLabel="false" />
+
+					</gallery>
+
+					<button
+					  id="btnSettings"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  size="normal"
+					  showLabel="false" />
+
+				</group>
+
+			</tab>
+
+		</tabs>
+	</ribbon>
+
+</customUI>

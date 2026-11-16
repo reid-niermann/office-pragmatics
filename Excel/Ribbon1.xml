@@ -1,0 +1,531 @@
+﻿<customUI
+  xmlns="http://schemas.microsoft.com/office/2009/07/customui"
+  onLoad="Ribbon_Load">
+
+	<ribbon>
+		<tabs>
+			<tab
+			  id="tabPragmatics"
+			  getLabel="GetLabel"
+			  getKeytip="GetKeytip">
+
+				<!-- ═════════════ Tracing ═════════════ -->
+				<group
+				  id="grpTracing"
+				  label="Tracing">
+
+					<button
+					  id="btnTracePrecedents"
+					  getLabel="GetLabel"
+					  size="large"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"/>
+
+					<splitButton
+					  id="sbTraceDependents"
+					  size="normal"
+					  showLabel="false"
+					  getKeytip="GetKeytip">
+						<button
+						  id="btnTraceDependents"
+						  getLabel="GetLabel"
+						  getImage="GetCustomImage"
+						  onAction="OnUniversalAction"
+						  getScreentip="GetScreentip"
+						  getSupertip="GetSupertip"/>
+						<menu id="menuTraceDependentControls">
+							<button
+							  id="btnRevertTrace"
+							  getLabel="GetLabel"
+							  showLabel="false"
+							  getImage="GetCustomImage"
+							  onAction="OnUniversalAction"
+							  getScreentip="GetScreentip"
+							  getSupertip="GetSupertip"/>
+						</menu>
+					</splitButton>
+
+					<splitButton
+					  id="sbPrecedentArrows"
+					  size="normal"
+					  showLabel="false"
+					  getKeytip="GetKeytip">
+						<button
+						  id="btnDrillPrecedents"
+						  getLabel="GetLabel"
+						  onAction="OnUniversalAction"
+						  getImage="GetCustomImage"
+						  getKeytip="GetKeytip"
+						  getScreentip="GetScreentip"
+						  getSupertip="GetSupertip"/>
+						<menu id="menuPrecedentOptions">
+							<button
+							  id="btnRemoveAllTracePrecedentArrows"
+							  getLabel="GetLabel"
+							  onAction="OnUniversalAction"
+							  getImage="GetCustomImage"
+							  getScreentip="GetScreentip"
+							  getSupertip="GetSupertip"/>
+						</menu>
+					</splitButton>
+
+					<splitButton
+					  id="sbDependentArrows"
+					  size="normal"
+					  showLabel="false"
+					  getKeytip="GetKeytip">
+						<button
+						  id="btnDrillDependents"
+						  getLabel="GetLabel"
+						  onAction="OnUniversalAction"
+						  getImage="GetCustomImage"
+						  getKeytip="GetKeytip"
+						  getScreentip="GetScreentip"
+						  getSupertip="GetSupertip"/>
+						<menu id="menuDepedentOptions">
+							<button
+							  id="btnRemoveAllTraceDependentArrows"
+							  getLabel="GetLabel"
+							  onAction="OnUniversalAction"
+							  getImage="GetCustomImage"
+							  getScreentip="GetScreentip"
+							  getSupertip="GetSupertip"/>
+						</menu>
+					</splitButton>
+				</group>
+
+				<!-- ═════════════ Formulas ═════════════ -->
+				<group
+				  id="grpFormulas"
+				  label="Formulas">
+
+					<gallery
+					  id="galFormulaTools"
+					  getLabel="GetLabel"
+					  size="large"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_Magnitude_Plus" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_Magnitude_Minus" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_FlipSign" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_FillRight" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_FillDown" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_AnchorCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_ErrorWrapNA" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_ErrorWrapZero" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_FormulaWrap" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_ConvertToLet" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_SolveFormula" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="galPasteTools"
+					  getLabel="GetLabel"
+					  size="large"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_pasteExact" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_pasteDuplicate" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_PasteNumberFormat" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_pasteFillColor" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_pasteBorders" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_pasteCellWidths" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_pasteCellHeights" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+				</group>
+
+				<!-- ═════════════ Formatting ═════════════ -->
+				<group
+				  id="grpFormatting"
+				  label="Formatting">
+
+					<splitButton
+					  id="splitBtnBrandFormat"
+					  size="large"
+					  getKeytip="GetKeytip">
+						<button id="btnBrandFormat" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<menu id="menuBrandFormatOptions">
+							<button id="btnChartBrandFormat" getLabel="GetLabel" onAction="OnUniversalAction" getImage="GetCustomImage" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+							<button id="btnTableBrandFormat" getLabel="GetLabel" onAction="OnUniversalAction" getImage="GetCustomImage" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+							<button id="btnBrandFillCycle" getLabel="GetLabel" onAction="OnUniversalAction" getImage="GetCustomImage" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+							<button id="btnBrandBorderCycle" getLabel="GetLabel" onAction="OnUniversalAction" getImage="GetCustomImage" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+							<button id="btnBrandFontColorCycle" getLabel="GetLabel" onAction="OnUniversalAction" getImage="GetCustomImage" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						</menu>
+					</splitButton>
+
+					<gallery
+					  id="galNumberFormats"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_NumberCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_CurrencyCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_PercentCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_DateCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_MultipleCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_BinaryCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_PlusDecimals" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_MinusDecimals" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="galFontColors"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_BBColorCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_ModelColorCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_AutoColorSelection" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="galFillColors"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_AutoTableColor" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_ModelFillColorCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_FillThemeColorCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="galOtherCycles"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_UnderlineCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_BorderCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_FontSizeCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_CellHeightCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_CellWidthCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_FootnoteCycle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_RemoveFootnotes" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="galFormatTools"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_ListBullets" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_AccountingDots" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_SumLine" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_LeftIndent" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_RightIndent" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_TransparentToWhite" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="galRangeTools"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_MergeToCenterAcrossSelection" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_hideToGroup" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_reverseColumns" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_reverseRows" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_deleteBlankColumns" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_deleteBlankRows" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_harcodeSelection" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_calculateCAGR" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="galSizingTools"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_Guides" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_ResizetoPPT" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_AutoGrid" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_SameWidth" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_SameHeight" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_SameWidthandHeight" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_ExtendLeft" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_ExtendRight" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_ExtendTop" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_ExtendBottom" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_FitHorizontal" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_FitVertical" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="galShapeAlignment"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_AlignLeft" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_AlignRight" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_AlignMiddle" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_AlignTop" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_AlignButton" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_AlignCenter" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_DistributeHorizonatal" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_DistributeVertical" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_SnapTogether" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_CycleSwap" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="btnInsertSymbols"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  onAction="OnInsertSymbol"
+					  columns="7"
+					  itemWidth="22"
+					  showItemLabel="true"
+					  showItemImage="false">
+						<item id="sym_check"  label="✓" screentip="Insert ✓"  supertip="Insert ✓ into the selected cell(s)"/>
+						<item id="sym_cross"  label="✗" screentip="Insert ✗"  supertip="Insert ✗ into the selected cell(s)"/>
+						<item id="sym_en"     label="–" screentip="Insert –"   supertip="Insert – (en dash)"/>
+						<item id="sym_delta"  label="Δ" screentip="Insert Δ"  supertip="Insert Δ (Delta)"/>
+						<item id="sym_sigma"  label="Σ" screentip="Insert Σ"  supertip="Insert Σ (Sigma)"/>
+						<item id="sym_inf"    label="∞" screentip="Insert ∞"  supertip="Insert ∞ (Infinity)"/>
+						<item id="sym_omega"  label="Ω" screentip="Insert Ω"  supertip="Insert Ω (Ohm)"/>
+						<item id="sym_neq"    label="≠" screentip="Insert ≠"  supertip="Insert ≠ (Not equal)"/>
+						<item id="sym_deg"    label="°" screentip="Insert °"  supertip="Insert ° (Degree)"/>
+						<item id="sym_star"   label="★" screentip="Insert ★"  supertip="Insert ★ (Star)"/>
+						<item id="sym_btc"    label="₿" screentip="Insert ₿"  supertip="Insert ₿ (Bitcoin)"/>
+						<item id="sym_xi"     label="Ξ" screentip="Insert Ξ"  supertip="Insert Ξ (Xi)"/>
+						<item id="sym_triup"  label="▲" screentip="Insert ▲"  supertip="Insert ▲ (Up triangle)"/>
+						<item id="sym_tridn"  label="▼" screentip="Insert ▼"  supertip="Insert ▼ (Down triangle)"/>
+						<item id="sym_pm"     label="±" screentip="Insert ±"  supertip="Insert ± (Plus/minus)"/>
+						<item id="sym_approx" label="≈" screentip="Insert ≈"  supertip="Insert ≈ (Approximately)"/>
+						<item id="sym_le"     label="≤" screentip="Insert ≤"  supertip="Insert ≤ (Less or equal)"/>
+						<item id="sym_ge"     label="≥" screentip="Insert ≥"  supertip="Insert ≥ (Greater or equal)"/>
+						<item id="sym_simeq"  label="≃" screentip="Insert ≃"  supertip="Insert ≃ (Asymptotically equal)"/>
+						<item id="sym_c"      label="©" screentip="Insert ©"  supertip="Insert © (Copyright)"/>
+						<item id="sym_tm"     label="™" screentip="Insert ™"  supertip="Insert ™ (Trademark)"/>
+					</gallery>
+				</group>
+
+				<!-- ═════════════ Sheet Tools ═════════════ -->
+				<group
+				  id="grpSheetTools"
+				  label="Sheet Tools">
+
+					<button
+					  id="btnSheetSelect"
+					  getLabel="GetLabel"
+					  size="large"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"/>
+
+					<button
+					  id="btnDeepSearch"
+					  getLabel="GetLabel"
+					  size="large"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"/>
+
+					<button
+					  id="btnVisualCheck"
+					  getLabel="GetLabel"
+					  size="large"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"/>
+
+					<button
+					  id="btnCleanFile"
+					  getLabel="GetLabel"
+					  size="large"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"/>
+				</group>
+
+				<!-- ═════════════ Libraries ═════════════ -->
+				<group
+				  id="grpLibraries"
+				  label="Library">
+
+					<button
+						id="btnLibrary"
+						getLabel="GetLabel"
+						size="large"
+						getImage="GetCustomImage"
+						onAction="OnUniversalAction"
+					    getKeytip="GetKeytip"
+						getScreentip="GetScreentip"
+						getSupertip="GetSupertip"/>
+
+				</group>
+
+				<!-- ═════════════ Chart Tools ═════════════ -->
+				<group
+				  id="grpChartTools"
+				  label="Charting">
+
+					<gallery
+					  id="galFormatToolsChart"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_StackSort" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_MaximizePlot" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_CenterPie" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_YMinZero" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_HideYAxis" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="galLabelTools"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_KeyboardControl" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_ResetLabels" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_KeyPoints" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_SuperScript" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="galInsertMetrics"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_insertArrowCAGR" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_insertElbowCAGR" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_AddStackedTotals" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_AddStatLine" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_AddMetricBubbles" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="galDuplicateChart"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip">
+						<button id="b_DuplicateToSheets" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_OffsetChart" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getKeytip="GetKeytip" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+					</gallery>
+
+					<gallery
+					  id="galCommonCharts"
+					  getLabel="GetLabel"
+					  size="normal"
+					  showLabel="false"
+					  getImage="GetCustomImage"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip">
+						<button id="b_ChartStackedWaterfall" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getScreentip="GetScreentip" getSupertip="GetSupertip"/>
+						<button id="b_ChartMarimekko" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getScreentip="GetScreentip" getSupertip="GetSupertip" getVisible="False"/>
+						<button id="b_ChartGantt" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getScreentip="GetScreentip" getSupertip="GetSupertip" getVisible="False"/>
+						<button id="b_ChartBubble" getLabel="GetLabel" getImage="GetCustomImage" onAction="OnUniversalAction" getScreentip="GetScreentip" getSupertip="GetSupertip" getVisible="False"/>
+					</gallery>
+				</group>
+
+				<!-- ═════════════ File Tools ═════════════ -->
+				<group
+				  id="grpFileTools"
+				  label="File">
+
+					<button
+					  id="btnVersionUp"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"/>
+
+					<button
+					  id="btnSaveAsPDF"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"/>
+
+					<button
+					  id="btnExportSheet"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"/>
+
+					<gallery
+					  id="galFileTools"
+					  getLabel="GetLabel"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"
+					  columns="1"
+					  rows="3"
+					  getImage="GetCustomImage"
+					  size="normal"
+					  showLabel="false">
+						<button id="b_Show_Explorer" getLabel="GetLabel" getScreentip="GetScreentip" getSupertip="GetSupertip" getImage="GetCustomImage" onAction="OnUniversalAction" showLabel="false" />
+						<button id="b_Copy_Path" getLabel="GetLabel" getScreentip="GetScreentip" getSupertip="GetSupertip" getImage="GetCustomImage" onAction="OnUniversalAction" showLabel="false" />
+						<button id="b_hidePageBreaks" getLabel="GetLabel" getScreentip="GetScreentip" getSupertip="GetSupertip" getImage="GetCustomImage" onAction="OnUniversalAction" showLabel="false" />
+					</gallery>
+
+					<button
+					  id="btnSettings"
+					  getLabel="GetLabel"
+					  showLabel="false"
+					  size="normal"
+					  getImage="GetCustomImage"
+					  onAction="OnUniversalAction"
+					  getKeytip="GetKeytip"
+					  getScreentip="GetScreentip"
+					  getSupertip="GetSupertip"/>
+				</group>
+
+			</tab>
+		</tabs>
+	</ribbon>
+</customUI>

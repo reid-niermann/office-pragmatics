@@ -1,0 +1,98 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Fragment>
+		<StandardDirectory Id="ProgramFiles6432Folder">
+			<Directory Id="INSTALLFOLDER" Name="Office Pragmatics">
+				<Directory Id="EXCELFOLDER" Name="Excel" />
+				<Directory Id="POWERPOINTFOLDER" Name="PowerPoint">
+					<Directory Id="POWERPOINTFOLDER_X64" Name="x64" />
+					<Directory Id="POWERPOINTFOLDER_X86" Name="x86" />
+				</Directory>
+				<Directory Id="WORDFOLDER" Name="Word" />
+			</Directory>
+
+			<!-- Excel Registry Components -->
+			<Component Id="Registry_Excel_FriendlyName">
+				<RegistryValue Id="RegKey_Excel_FriendlyName" Root="HKCU"
+							   Key="Software\Microsoft\Office\Excel\AddIns\OfficePragmatics.Excel"
+							   Name="FriendlyName"
+							   Value="Office Pragmatics Excel"
+							   Type="string" KeyPath="yes" />
+			</Component>
+			<Component Id="Registry_Excel_Description">
+				<RegistryValue Id="RegKey_Excel_Description" Root="HKCU"
+							   Key="Software\Microsoft\Office\Excel\AddIns\OfficePragmatics.Excel"
+							   Name="Description"
+							   Value="Office Pragmatics for Microsoft Excel"
+							   Type="string" KeyPath="yes" />
+			</Component>
+			<Component Id="Registry_Excel_Manifest">
+				<RegistryValue Id="RegKey_Excel_Manifest" Root="HKCU"
+							   Key="Software\Microsoft\Office\Excel\AddIns\OfficePragmatics.Excel"
+							   Name="Manifest" Value="file:///[EXCELFOLDER]Office Pragmatics Excel.vsto|vstolocal"
+							   Type="string" KeyPath="yes" />
+			</Component>
+			<Component Id="Registry_Excel_LoadBehavior">
+				<RegistryValue Id="RegKey_Excel_LoadBehavior" Root="HKCU"
+							   Key="Software\Microsoft\Office\Excel\AddIns\OfficePragmatics.Excel"
+							   Name="LoadBehavior" Value="3"
+							   Type="integer" KeyPath="yes" />
+			</Component>
+
+			<!-- PowerPoint Registry Components -->
+			<Component Id="Registry_PowerPoint_FriendlyName">
+				<RegistryValue Id="RegKey_PowerPoint_FriendlyName" Root="HKCU"
+							   Key="Software\Microsoft\Office\PowerPoint\AddIns\OfficePragmatics.PowerPoint"
+							   Name="FriendlyName"
+							   Value="Office Pragmatics PowerPoint"
+							   Type="string" KeyPath="yes" />
+			</Component>
+			<Component Id="Registry_PowerPoint_Description">
+				<RegistryValue Id="RegKey_PowerPoint_Description" Root="HKCU"
+							   Key="Software\Microsoft\Office\PowerPoint\AddIns\OfficePragmatics.PowerPoint"
+							   Name="Description"
+							   Value="Office Pragmatics for Microsoft PowerPoint"
+							   Type="string" KeyPath="yes" />
+			</Component>
+			<Component Id="Registry_PowerPoint_Manifest">
+				<RegistryValue Id="RegKey_PowerPoint_Manifest" Root="HKCU"
+							   Key="Software\Microsoft\Office\PowerPoint\AddIns\OfficePragmatics.PowerPoint"
+							   Name="Manifest" Value="file:///[POWERPOINTFOLDER]Office Pragmatics PowerPoint.vsto|vstolocal"
+							   Type="string" KeyPath="yes" />
+			</Component>
+			<Component Id="Registry_PowerPoint_LoadBehavior">
+				<RegistryValue Id="RegKey_PowerPoint_LoadBehavior" Root="HKCU"
+							   Key="Software\Microsoft\Office\PowerPoint\AddIns\OfficePragmatics.PowerPoint"
+							   Name="LoadBehavior" Value="3"
+							   Type="integer" KeyPath="yes" />
+			</Component>
+
+			<!-- Word Registry Components -->
+			<Component Id="Registry_Word_FriendlyName">
+				<RegistryValue Id="RegKey_Word_FriendlyName" Root="HKCU"
+							   Key="Software\Microsoft\Office\Word\AddIns\OfficePragmatics.Word"
+							   Name="FriendlyName"
+							   Value="Office Pragmatics Word"
+							   Type="string" KeyPath="yes" />
+			</Component>
+			<Component Id="Registry_Word_Description">
+				<RegistryValue Id="RegKey_Word_Description" Root="HKCU"
+							   Key="Software\Microsoft\Office\Word\AddIns\OfficePragmatics.Word"
+							   Name="Description"
+							   Value="Office Pragmatics for Microsoft Word"
+							   Type="string" KeyPath="yes" />
+			</Component>
+			<Component Id="Registry_Word_Manifest">
+				<RegistryValue Id="RegKey_Word_Manifest" Root="HKCU"
+							   Key="Software\Microsoft\Office\Word\AddIns\OfficePragmatics.Word"
+							   Name="Manifest" Value="file:///[WORDFOLDER]Office Pragmatics Word.vsto|vstolocal"
+							   Type="string" KeyPath="yes" />
+			</Component>
+			<Component Id="Registry_Word_LoadBehavior">
+				<RegistryValue Id="RegKey_Word_LoadBehavior" Root="HKCU"
+							   Key="Software\Microsoft\Office\Word\AddIns\OfficePragmatics.Word"
+							   Name="LoadBehavior" Value="3"
+							   Type="integer" KeyPath="yes" />
+			</Component>
+		</StandardDirectory>
+	</Fragment>
+</Wix>

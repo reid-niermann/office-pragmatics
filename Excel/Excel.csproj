@@ -1,0 +1,836 @@
+<Project ToolsVersion="17.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!--
+    This section defines project-level properties.
+
+    AssemblyName
+      Name of the output assembly.
+    Configuration
+      Specifies a default value for debug.
+    OutputType
+      Must be "Library" for VSTO.
+    Platform
+      Specifies what CPU the output of this project can run on.
+    NoStandardLibraries
+      Set to "false" for VSTO.
+    RootNamespace
+      In C#, this specifies the namespace given to new files. In VB, all objects are
+      wrapped in this namespace at runtime.
+  -->
+  <PropertyGroup>
+    <ProjectTypeGuids>{BAA0C2D2-18E2-41B9-852F-F413020CAA33};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CC73B27B-3807-4A48-B8BF-02225B5CAE81}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <RootNamespace>OfficePragmatics_Excel</RootNamespace>
+    <AssemblyName>Office Pragmatics Excel</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <DefineConstants>VSTO40;UseOfficeInterop</DefineConstants>
+    <ResolveComReferenceSilent>true</ResolveComReferenceSilent>
+    <IsWebBootstrapper>False</IsWebBootstrapper>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <PublishUrl>publish\</PublishUrl>
+    <InstallUrl />
+    <TargetCulture>en</TargetCulture>
+    <ApplicationVersion>1.0.0.28</ApplicationVersion>
+    <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>days</UpdateIntervalUnits>
+    <ProductName>Office Pragmatics Excel</ProductName>
+    <PublisherName>Office Pragmatics LLC</PublisherName>
+    <SupportUrl />
+    <FriendlyName>Office Pragmatics Excel</FriendlyName>
+    <OfficeApplicationDescription />
+    <LoadBehavior>3</LoadBehavior>
+  </PropertyGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.VSTORuntime.4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft Visual Studio 2010 Tools for Office Runtime %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <PropertyGroup>
+    <!--
+      OfficeApplication
+        Add-in host application
+    -->
+    <OfficeApplication>Excel</OfficeApplication>
+  </PropertyGroup>
+  <!--
+    This section defines properties that are set when the "Debug" configuration is selected.
+
+    DebugSymbols
+      If "true", create symbols (.pdb). If "false", do not create symbols.
+    DefineConstants
+      Constants defined for the preprocessor.
+    EnableUnmanagedDebugging
+      If "true", starting the debugger will attach both managed and unmanaged debuggers.
+    Optimize
+      If "true", optimize the build output. If "false", do not optimize.
+    OutputPath
+      Output path of project relative to the project file.
+    WarningLevel
+      Warning level for the compiler.
+  -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!--
+    This section defines properties that are set when the "Release" configuration is selected.
+
+    DebugSymbols
+      If "true", create symbols (.pdb). If "false", do not create symbols.
+    DefineConstants
+      Constants defined for the preprocessor.
+    EnableUnmanagedDebugging
+      If "true", starting the debugger will attach both managed and unmanaged debuggers.
+    Optimize
+      If "true", optimize the build output. If "false", do not optimize.
+    OutputPath
+      Output path of project relative to the project file.
+    WarningLevel
+      Warning level for the compiler.
+  -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!--
+    This section specifies references for the project.
+  -->
+  <ItemGroup>
+    <Reference Include="Accessibility" />
+    <Reference Include="ClosedXML, Version=0.105.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.105.0\lib\netstandard2.0\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="ClosedXML.Parser, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1d5f7376574c51ec, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.Parser.2.0.0\lib\netstandard2.0\ClosedXML.Parser.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=3.3.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.3.3.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml.Framework, Version=3.3.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.Framework.3.3.0\lib\net46\DocumentFormat.OpenXml.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.1.0.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.1.0\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.1\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RBush, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c77e27b81f4d0187, processorArchitecture=MSIL">
+      <HintPath>..\packages\RBush.Signed.4.0.0\lib\net47\RBush.dll</HintPath>
+    </Reference>
+    <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\SixLabors.Fonts.1.0.0\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.6.3\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Tools.Applications.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools.Excel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Tools.Common.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="$([System.String]::Copy(&quot;;$(DefineConstants);&quot;).ToLower().Contains(';useofficeinterop;')) or $([System.String]::Copy(&quot;,$(DefineConstants),&quot;).ToLower().Contains(',useofficeinterop,'))">
+      <ItemGroup>
+        <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+          <Private>False</Private>
+          <EmbedInteropTypes>true</EmbedInteropTypes>
+        </Reference>
+        <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+          <Private>False</Private>
+          <EmbedInteropTypes>true</EmbedInteropTypes>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <COMReference Include="Microsoft.Office.Core">
+          <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+          <VersionMajor>2</VersionMajor>
+          <VersionMinor>7</VersionMinor>
+          <Lcid>0</Lcid>
+          <WrapperTool>tlbimp</WrapperTool>
+          <Isolated>False</Isolated>
+          <EmbedInteropTypes>true</EmbedInteropTypes>
+        </COMReference>
+        <COMReference Include="Microsoft.Office.Interop.Excel">
+          <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+          <VersionMajor>1</VersionMajor>
+          <VersionMinor>8</VersionMinor>
+          <Lcid>0</Lcid>
+          <WrapperTool>tlbimp</WrapperTool>
+          <Isolated>False</Isolated>
+          <EmbedInteropTypes>true</EmbedInteropTypes>
+        </COMReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <!--
+    This section defines the user source files that are part of the project.
+     
+    A "Compile" element specifies a source file to compile.
+    An "EmbeddedResource" element specifies an .resx file for embedded resources.
+    A "None" element specifies a file that is not to be passed to the compiler (for instance, 
+    a text file or XML file).
+    The "AppDesigner" element specifies the directory where the application properties files
+    can be found.
+  -->
+  <ItemGroup>
+    <Compile Include="Classes\Alignment\AlignmentHelper.cs" />
+    <Compile Include="Classes\Brand\AutoBrand.cs" />
+    <Compile Include="Classes\Brand\TableFormatLogic.cs" />
+    <Compile Include="Classes\Brand\BrandChartLogic.cs" />
+    <Compile Include="Classes\Charting\CAGRArrow.cs" />
+    <Compile Include="Classes\Charting\CommonCharts.cs" />
+    <Compile Include="Classes\Charting\OffsetChart.cs" />
+    <Compile Include="Classes\Charting\StatBubble.cs" />
+    <Compile Include="Classes\Charting\DuplicateChart.cs" />
+    <Compile Include="Classes\Charting\FormatTools.cs" />
+    <Compile Include="Classes\Charting\LabelTools.cs" />
+    <Compile Include="Classes\Charting\StackedColumn.cs" />
+    <Compile Include="Classes\Charting\StatLines.cs" />
+    <Compile Include="Classes\File Tools\Export Sheet.cs" />
+    <Compile Include="Classes\File Tools\FileTools.cs" />
+    <Compile Include="Classes\Formatting\CellRanges.cs" />
+    <Compile Include="Classes\Formatting\FillColors.cs" />
+    <Compile Include="Classes\Formatting\FontColor.cs" />
+    <Compile Include="Classes\Formatting\NumberFormats.cs" />
+    <Compile Include="Classes\Formatting\OtherFormatting.cs" />
+    <Compile Include="Classes\Formulas\AutoFill.cs" />
+    <Compile Include="Classes\Formulas\FormulaTools.cs" />
+    <Compile Include="Classes\Library\LibraryUtility.cs" />
+    <Compile Include="Classes\Tracing\TraceRevert.cs" />
+    <Compile Include="Classes\_Core\PragmaticsUI.cs" />
+    <Compile Include="Classes\Pasting\PasteTools.cs" />
+    <Compile Include="Classes\Settings\AllSettings.cs" />
+    <Compile Include="Classes\Sheets\SuperFind.cs" />
+    <Compile Include="Classes\File Tools\WorkbookCleaner.cs" />
+    <Compile Include="Classes\Sheets\SheetSelect.cs" />
+    <Compile Include="Classes\Sheets\VisualCheckHelper.cs" />
+    <Compile Include="CompanionXLAM\AddInUtilities.cs" />
+    <Compile Include="Classes\Size\SizeHelper.cs" />
+    <Compile Include="Classes\Tracing\PrecedentArrows.cs" />
+    <Compile Include="Classes\Tracing\DependentArrows.cs" />
+    <Compile Include="Classes\Tracing\TraceDependent.cs" />
+    <Compile Include="Classes\Tracing\TracePrecedent.cs" />
+    <Compile Include="Classes\Utilities\SymbolGallery.cs" />
+    <Compile Include="Classes\Utilities\Utility.cs" />
+    <Compile Include="Classes\_Core\RibbonController.cs" />
+    <Compile Include="CompanionXLAM\XlamInstaller.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <EmbeddedResource Include="CompanionXLAM\Pragmatics Companion.xlam" />
+    <None Include="OfficePragmatics Excel_TemporaryKey.pfx" />
+    <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Ribbon1.cs" />
+    <Compile Include="ThisAddIn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="ThisAddIn.Designer.xml">
+      <DependentUpon>ThisAddIn.cs</DependentUpon>
+    </None>
+    <Compile Include="ThisAddIn.Designer.cs">
+      <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
+    </Compile>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Ribbon1.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- PowerPoint PIA instead of COM references, so the project builds on machines
+         without Office installed. Office core comes from the UseOfficeInterop block
+         above; VBIDE was unused. -->
+    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <Private>False</Private>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TBU.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_AccountingDots.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_AddMetricBubbles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_AddStackedTotals.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_AddStatLine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_AnchorCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_AutoColorSelection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_AutoTableColor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_BBColorCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_BinaryCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_BorderCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_calculateCAGR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_CellHeightCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_CellWidthCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_CenterPie.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_ChartBubble.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_chartChartImport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_ChartGantt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_ChartMarimekko.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_ChartWaterfall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_CommonCharts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_ConvertToLet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_Copy_Path.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_CurrencyCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_CustomColorCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_DateCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_deleteBlankColumns.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_deleteBlankRows.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_DuplicateToColumns.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_DuplicateToRows.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_DuplicateToSheets.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_ErrorWrapNA.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_ErrorWrapZero.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_FillDown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_FillRight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_FlipSign.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_FontSizeCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_FormulaWrap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_Guides.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_harcodeSelection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_hidePageBreaks.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_hideToGroup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_HideYAxis.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_insertArrowCAGR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_insertElbowCAGR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_KeyboardControl.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_KeyPoints.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_LeftIndent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_ListBullets.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_Magnitude_Minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_Magnitude_Plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_MergeToCenterAcrossSelection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_MinusDecimals.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_ModelColorCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_MultipleCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_pasteBorders.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_pasteCellHeights.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_pasteCellWidths.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_pasteDuplicate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_pasteExact.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_pasteFillColor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_PasteNumberFormat.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_PercentCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_pictureChartImport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_PlusDecimals.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_RemoveFootnotes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_ResetLabels.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_ResizetoPPT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_reverseColumns.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_reverseRows.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_RightIndent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_Show_Explorer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_SolveFormula.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_StackSort.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_SumLine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_SuperScript.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_ThemeColorCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_TransparentToWhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_vectorChartImport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\b_YMinZero.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignBottom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignCenter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignHorizontal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignLeft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignMiddle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignRight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignTogether.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignTop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAlignVertical.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnAutoGrid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnBrandBorderCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnBrandFillCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnBrandFontColorCycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnBrandFormat.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnChart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnChartFastFormat.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnCleanFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnCustomColors.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnCycleSwap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnDeepSearch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnDrillDependents.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnDrillPrecedents.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnExportSheet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnExtendBottom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnExtendLeft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnExtendRight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnExtendTop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnFileTools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnFitHorz.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnFitVert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnFootnote.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnImportText.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnInsertSymbols.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnLibrary.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnMaximize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRefresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRefreshLinks.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRemoveAllTraceArrows.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnRevertDependents.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSameHeight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSameHW.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSameWidth.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSaveAsPDF.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSettings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnSheetSelect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnText.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnTraceDependents.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnTracePrecedents.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnVersionUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btnVisualCheck.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galDuplicateChart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galFillColors.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galFontColors.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galFormatTools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galFormatToolsChart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galFormulaTools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galInsertMetrics.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galLabelTools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galNumberFormats.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galOtherCycles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galPasteTools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galRangeTools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galShapeAlignment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galSizingTools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Pragmatics.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>OfficePragmatics Excel_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>AF42A282880C020FAAF3DCDF3FA231FB26CBE5FB</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Pragmatics.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <!-- Include the build rules for a C# project. -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Include additional build rules for an Office application add-in. -->
+  <Import Project="$(VSToolsPath)\OfficeTools\Microsoft.VisualStudio.Tools.Office.targets" Condition="'$(VSToolsPath)' != ''" />
+  <!-- This section defines VSTO properties that describe the host-changeable project properties. -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
+        <ProjectProperties HostName="Excel" HostPackage="{29A7B9D7-A7F1-4328-8EF0-6B2D1A56B2C1}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="Excel" Language="cs" TemplatesPath="" DebugInfoExeName="#Software\Microsoft\Office\16.0\Excel\InstallRoot\Path#excel.exe" DebugInfoCommandLine="/x" AddItemTemplatesGuid="{51063C3A-E220-4D12-8922-BDA915ACD783}" />
+        <Host Name="Excel" GeneratedCodeNamespace="OfficePragmatics_Excel" PublishedHash="69C324AB27932AA2FBF2B7EA72250886FF164DE6" IconIndex="0">
+          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" PublishedHash="1ED8F079C9D1DA425F7F34A9EFA57E863C8CC334" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
+        </Host>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

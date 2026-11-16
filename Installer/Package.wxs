@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+  <Package Id="Office_Pragmatics.Installer" Name="Office Pragmatics" Manufacturer="Office Pragmatics LLC" Version="1.0.0.86">
+    <MajorUpgrade DowngradeErrorMessage="A newer version of this        is already installed." />
+    <Media Id="1" Cabinet="OfficePragmatics.cab" EmbedCab="yes" />
+    <!-- ===== Close MS Office Applications ===== -->
+    <util:CloseApplication Id="CloseExcel" Target="EXCEL.EXE" CloseMessage="yes" RebootPrompt="no" PromptToContinue="yes" Description="Excel must be closed before installation can proceed." />
+    <util:CloseApplication Id="ClosePowerPoint" Target="POWERPNT.EXE" CloseMessage="yes" RebootPrompt="no" PromptToContinue="yes" Description="PowerPoint must be closed before installation can proceed." />
+    <util:CloseApplication Id="CloseWord" Target="WINWORD.EXE" CloseMessage="yes" RebootPrompt="no" PromptToContinue="yes" Description="Word must be closed before installation can proceed." />
+    <!-- ===== Features ===== -->
+    <Feature Id="ProductFeature" Title="Office Pragmatics" Level="1">
+      <!-- Excel Components -->
+      <ComponentGroupRef Id="ExcelComponents" />
+      <ComponentRef Id="Registry_Excel_FriendlyName" />
+      <ComponentRef Id="Registry_Excel_Description" />
+      <ComponentRef Id="Registry_Excel_Manifest" />
+      <ComponentRef Id="Registry_Excel_LoadBehavior" />
+      <!-- PowerPoint Components -->
+      <ComponentGroupRef Id="PowerPointComponents" />
+      <ComponentRef Id="Registry_PowerPoint_FriendlyName" />
+      <ComponentRef Id="Registry_PowerPoint_Description" />
+      <ComponentRef Id="Registry_PowerPoint_Manifest" />
+      <ComponentRef Id="Registry_PowerPoint_LoadBehavior" />
+      <!-- Word Components -->
+      <ComponentGroupRef Id="WordComponents" />
+      <ComponentRef Id="Registry_Word_FriendlyName" />
+      <ComponentRef Id="Registry_Word_Description" />
+      <ComponentRef Id="Registry_Word_Manifest" />
+      <ComponentRef Id="Registry_Word_LoadBehavior" />
+    </Feature>
+    <!-- ===== AppSearch: VSTO runtime (both registry views) ===== -->
+    <Property Id="VSTO_V4R_32">
+      <RegistrySearch Id="VSTO_V4R_32_Search" Root="HKLM" Key="SOFTWARE\Microsoft\VSTO Runtime Setup\v4R" Name="Version" Type="raw" Bitness="always32" />
+    </Property>
+    <Property Id="VSTO_V4R_64">
+      <RegistrySearch Id="VSTO_V4R_64_Search" Root="HKLM" Key="SOFTWARE\Microsoft\VSTO Runtime Setup\v4R" Name="Version" Type="raw" Bitness="always64" />
+    </Property>
+    <Property Id="VSTO_V4_32">
+      <RegistrySearch Id="VSTO_V4_32_Search" Root="HKLM" Key="SOFTWARE\Microsoft\VSTO Runtime Setup\v4" Name="Version" Type="raw" Bitness="always32" />
+    </Property>
+    <Property Id="VSTO_V4_64">
+      <RegistrySearch Id="VSTO_V4_64_Search" Root="HKLM" Key="SOFTWARE\Microsoft\VSTO Runtime Setup\v4" Name="Version" Type="raw" Bitness="always64" />
+    </Property>
+    <PropertyRef Id="NETFRAMEWORK40FULL" />
+    <!-- ===== Launch conditions ===== -->
+    <Launch Message="The Visual Studio 2010 Tools for Office Runtime is not installed. Please download and install from https://www.microsoft.com/en-us/download/details.aspx?id=20479." Condition="         Installed OR         (VSTO_V4R_32 AND VSTO_V4R_32 &gt;= &quot;10.0.30319&quot;) OR         (VSTO_V4R_64 AND VSTO_V4R_64 &gt;= &quot;10.0.30319&quot;) OR         (VSTO_V4_32  AND VSTO_V4_32  &gt;= &quot;10.0.21022&quot;) OR         (VSTO_V4_64  AND VSTO_V4_64  &gt;= &quot;10.0.21022&quot;)" />
+    <Launch Message="This application requires .NET Framework 4.0." Condition="Installed OR NETFRAMEWORK40FULL" />
+  </Package>
+</Wix>

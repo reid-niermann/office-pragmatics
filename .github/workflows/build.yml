@@ -1,0 +1,101 @@
+name: Build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+  release:
+    types: [published]    # publishing a GitHub Release attaches the installer to it
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    # windows-2022 ships Visual Studio 2022 with the Office/SharePoint (VSTO) workload.
+    runs-on: windows-2022
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: microsoft/setup-msbuild@v2
+
+      - uses: NuGet/setup-nuget@v2
+
+      # VSTO requires signed manifests. Release builds sign them with the maintainer's
+      # certificate; CI uses a throwaway self-signed one. The installer puts the add-ins
+      # under Program Files, which VSTO trusts without a prompt.
+      - name: Create manifest signing certificate
+        shell: pwsh
+        run: |
+          $cert = New-SelfSignedCertificate -Type CodeSigningCert `
+            -Subject "CN=Office Pragmatics (unofficial build)" `
+            -CertStoreLocation Cert:\CurrentUser\My `
+            -Provider "Microsoft Enhanced RSA and AES Cryptographic Provider" -KeySpec Signature `
+            -KeyAlgorithm RSA -KeyLength 2048 -HashAlgorithm SHA256 `
+            -NotAfter (Get-Date).AddYears(3)
+          "MANIFEST_CERT_THUMBPRINT=$($cert.Thumbprint)" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Restore NuGet packages
+        shell: pwsh
+        run: |
+          foreach ($cfg in 'Excel\packages.config', 'Word\packages.config', 'Powerpoint\packages.config') {
+            nuget restore $cfg -PackagesDirectory packages -NonInteractive
+            if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          }
+
+      - name: Build add-ins
+        shell: pwsh
+        run: |
+          foreach ($proj in 'Excel\Excel.csproj', 'Powerpoint\PowerPoint.csproj', 'Word\Word.csproj') {
+            msbuild $proj /nologo /v:minimal /p:Configuration=Release /p:Platform=AnyCPU `
+              /p:ManifestCertificateThumbprint=$env:MANIFEST_CERT_THUMBPRINT /p:ManifestKeyFile=
+            if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          }
+
+      - name: Build MSI
+        shell: pwsh
+        run: msbuild "Installer\Office Pragmatics Installer.wixproj" /restore /nologo /v:minimal /p:Configuration=Release /p:Platform=x64
+
+      - name: Build setup bundle
+        shell: pwsh
+        run: msbuild "Office Pragmatics Setup\Office Pragmatics Setup.wixproj" /restore /nologo /v:minimal /p:Configuration=Release /p:Platform=x64
+
+      - name: Collect installers
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item "Office Pragmatics Setup\bin\x64\Release\Office Pragmatics Setup.exe" dist\Office-Pragmatics-Setup.exe
+          Copy-Item "Installer\bin\x64\Release\en-US\Office Pragmatics Installer.msi" dist\Office-Pragmatics.msi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: office-pragmatics-installer
+          if-no-files-found: error
+          path: dist/
+
+  release:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: office-pragmatics-installer
+          path: dist
+
+      - name: Attach installers to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          gh release upload "$TAG" dist/Office-Pragmatics-Setup.exe dist/Office-Pragmatics.msi \
+            --repo "$GITHUB_REPOSITORY" --clobber
