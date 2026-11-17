@@ -14,7 +14,6 @@ using SD = System.Drawing;
 // VSTO Tools
 using Microsoft.Office.Tools;
 
-// Using your PragmaticsUI namespace
 using OfficePragmatics_Excel.Settings;
 
 namespace OfficePragmatics_Powerpoint.Classes.ExcelLinking

@@ -173,7 +173,7 @@ namespace OfficePragmatics_Excel
             var topLeft = (Excel.Range)sel.Cells[1, 1];
             var pasteRange = topLeft.get_Resize(_storedRows, _storedCols);
 
-            // NEW: Large-range confirmation (threshold: > 25,000 cells)
+            // Large-range confirmation (threshold: > 25,000 cells)
             int targetCells = _storedRows * _storedCols;
             if (targetCells > 25000)
             {

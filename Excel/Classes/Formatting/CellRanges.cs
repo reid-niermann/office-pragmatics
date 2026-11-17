@@ -606,7 +606,7 @@ namespace OfficePragmatics_Excel
                 return;
             }
 
-            // NEW: default output = last value cell in the detected values range
+            // Default output = last value cell in the detected values range
             string defaultOut = GetSuggestedOutputTarget(sel);
 
             object outObj = null;

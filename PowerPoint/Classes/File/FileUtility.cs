@@ -88,7 +88,7 @@ namespace OfficePragmatics_PowerPoint.File
                     }
                     else
                     {
-                        // Local: mirror your original behavior precisely
+                        // Local file
                         string v2Full = Path.Combine(dir, v2Name);
                         string v1DestDir = FindArchiveFolder(dir);
                         if (v1DestDir == null)

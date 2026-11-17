@@ -76,7 +76,7 @@ namespace OfficePragmatics_Excel.Classes
                     }
                     else
                     {
-                        // Local: preserve your original behavior (Archive move, conflicts, etc.)
+                        // Local file: archive move, conflict handling, etc.
                         string v2_full = System.IO.Path.Combine(dir, v2Name);
                         string archiveFolder = FindArchiveFolder(dir);
                         if (archiveFolder == null)
@@ -202,7 +202,7 @@ namespace OfficePragmatics_Excel.Classes
                     }
                 }
 
-                // Export active sheet (keeps your original behavior)
+                // Export active sheet
                 wb.ActiveSheet.ExportAsFixedFormat(
                     Type: Excel.XlFixedFormatType.xlTypePDF,
                     Filename: pdfPath,

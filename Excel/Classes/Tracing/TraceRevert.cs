@@ -95,7 +95,7 @@ namespace OfficePragmatics_Excel
 
         /// <summary>
         /// Safely selects a range in Excel, handling activation and scrolling.
-        /// This is a copy of the SafeSelect method from TracePrecedent.
+        /// Same logic as SafeSelect in TracePrecedent.
         /// </summary>
         private static void SafeSelect(Excel.Range rng)
         {

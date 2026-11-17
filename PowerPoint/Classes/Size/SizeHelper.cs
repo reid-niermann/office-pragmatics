@@ -92,7 +92,7 @@ namespace OfficePragmatics_PowerPoint.Size
             float centerX = shp.Left + shp.Width / 2;
             float centerY = shp.Top + shp.Height / 2;
 
-            // EMF Fix: Capture and temporarily unlock Aspect Ratio.
+            // EMF pictures: capture and temporarily unlock Aspect Ratio.
             // Without this, setting Width auto-changes Height (and vice versa), preventing exact target sizing.
             Office.MsoTriState originalLock = shp.LockAspectRatio;
             if (originalLock == Office.MsoTriState.msoTrue)

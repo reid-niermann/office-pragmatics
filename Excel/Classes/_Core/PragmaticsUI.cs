@@ -278,7 +278,7 @@ namespace OfficePragmatics_Excel.Settings
             foreach (Control c in root.Controls)
             {
                 if (c is ListBox lb && lb.DrawMode != DrawMode.Normal)
-                    lb.ItemHeight = Dpi.Px(36); // your design row height
+                    lb.ItemHeight = Dpi.Px(36); // design row height
                 if (c is ListView lv)
                 {
                     // Ensure checkboxes / row spacing look right when you use OwnerDraw

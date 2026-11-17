@@ -1247,25 +1247,9 @@ namespace OfficePragmatics_Excel.Classes
                 var plain = string.Join("|", namesToMatch.Select(Regex.Escape));
                 var quoted = string.Join("|", namesToMatch.Select(n => Regex.Escape(n.Replace("'", "''"))));
 
-                // Matches 'SheetName'! OR SheetName! OR TableName (anywhere)
-                // Note: Tables aren't followed by !, but usually [ or are distinct.
-                // To be safe and catch simple table names, we relax the lookahead for the plain match slightly
-                // or simply match the name as a distinct word if possible.
-
-                // Revised regex strategy:
-                // 1. Quoted sheet name: 'Name' followed by !
-                // 2. Unquoted sheet name: Name followed by !
-                // 3. Table Name: Just "Name" (but ideally bounded so we don't match substrings)
-
-                // However, preserving your original style + table support:
-                // match: ('EncodedName' OR SimpleName) followed by !   <-- Sheet Logic
-                // OR match: SimpleName followed by [                   <-- Table Logic
-
-                // Actually, simplest is just to match the name literal. 
-                // But blindly matching "Data" might hit a function name or string.
-                // Structure refs usually look like TableName[ or TableName[[#Headers]...
-
-                // Let's stick to a robust detection:
+                // Matches a sheet reference ('Quoted Name'! or PlainName!) or a structured
+                // table reference (TableName[...). A bare name isn't enough: it could be a
+                // function name or text inside a string.
                 // (?:'(?:quoted)'|(?:\bplain\b))(?=\!|\[)
 
                 var pattern = @"(?i)(?:'(?:" + quoted + @")'|(?:\b(?:" + plain + @")\b))(?=\!|\[)";
@@ -1599,7 +1583,7 @@ namespace OfficePragmatics_Excel.Classes
                 if (wbChanged) OOXmlExportSanitizer.SaveXmlToEntry(wbXml, wbEntry, zip);
                 if (relChanged) OOXmlExportSanitizer.SaveXmlToEntry(relXml, relEntry, zip);
 
-                // FIX: Clean up [Content_Types].xml after all part deletions
+                // Clean up [Content_Types].xml after all part deletions
                 OOXmlExportSanitizer.CleanupContentTypes(zip);
             }
         }

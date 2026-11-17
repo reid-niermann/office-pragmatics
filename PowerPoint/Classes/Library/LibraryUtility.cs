@@ -1279,7 +1279,7 @@ namespace OfficePragmatics_PowerPoint
             }
         }
 
-        // --- PowerPoint Interaction Methods (unchanged from original) ---
+        // --- PowerPoint Interaction Methods ---
         private void SaveSelectedObjects(string pptxFilePath, string pngThumbPath, string uniqueID)
         {
             PowerPoint.Selection sel = _pptApplication.ActiveWindow.Selection;

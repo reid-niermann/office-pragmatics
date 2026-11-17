@@ -315,7 +315,7 @@ namespace OfficePragmatics_PowerPoint.ExcelLinking
 
         /* ═════════════════════  4. SHARED PASTE LOGIC  ═════════════════════ */
 
-        // CHANGED: Added sizeMode to determine if we scale Height
+        // sizeMode decides whether Height is scaled
         private static PowerPoint.Shape PasteAndFixTable(PowerPoint.Application ppApp, PowerPoint.Slide slide, Excel.Range sourceRange, float targetLeft, float targetTop, float targetWidth, float targetHeight, string sizeMode)
         {
             // 1. READ STRUCTURE
@@ -450,7 +450,7 @@ namespace OfficePragmatics_PowerPoint.ExcelLinking
                     tTop = (ppApp.ActivePresentation.PageSetup.SlideHeight - h) / 2;
                 }
 
-                // CHANGED: Get Size Mode from Ribbon
+                // Get Size Mode from Ribbon
                 Ribbon1 ribbon = Ribbon1.Instance;
                 string sizeMode = ribbon?.GetCurrentImportMatchType() ?? "Match Width";
 
@@ -518,7 +518,7 @@ namespace OfficePragmatics_PowerPoint.ExcelLinking
                 tTop = (ppApp.ActivePresentation.PageSetup.SlideHeight - tHeight) / 2;
             }
 
-            // CHANGED: Get Size Mode from Ribbon
+            // Get Size Mode from Ribbon
             Ribbon1 ribbon = Ribbon1.Instance;
             string sizeMode = ribbon?.GetCurrentImportMatchType() ?? "Match Width";
             if (!hasAnchor) sizeMode = "Match Width";
@@ -550,7 +550,7 @@ namespace OfficePragmatics_PowerPoint.ExcelLinking
 
                 if (hasAnchor)
                 {
-                    // CHANGED: Pass sizeMode logic to resize helper
+                    // Pass sizeMode logic to resize helper
                     bool scaleHeight = string.Equals(sizeMode, "Match All", StringComparison.OrdinalIgnoreCase);
                     CopyRangeWithTempResize(rng, tWidth, tHeight, scaleHeight, copyOp);
                 }
@@ -568,7 +568,7 @@ namespace OfficePragmatics_PowerPoint.ExcelLinking
                 shp.LockAspectRatio = Office.MsoTriState.msoFalse;
                 shp.Left = tLeft; shp.Top = tTop; shp.Width = tWidth;
 
-                // CHANGED: If Match All, explicitly set height
+                // If Match All, explicitly set height
                 if (hasAnchor && string.Equals(sizeMode, "Match All", StringComparison.OrdinalIgnoreCase))
                 {
                     shp.Height = tHeight;

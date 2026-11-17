@@ -98,18 +98,8 @@ namespace OfficePragmatics_Excel
                         }
                         else
                         {
-                            // If no consistency, ensure no pattern from previous runs on this cell
-                            // Only do this if we are NOT applying a new pattern, to avoid
-                            // overwriting other existing patterns unnecessarily.
-                            // However, the original VisualCheck only adds patterns, it doesn't remove.
-                            // For consistency, we will ensure cells *not* matching consistency criteria
-                            // get their pattern and background reset if they previously had our highlight.
-                            // This part is tricky: if a cell *was* highlighted and no longer meets criteria,
-                            // should it be cleared? The current logic only *adds*.
-                            // For now, let's stick to the original logic of only *adding*.
-                            // The "Remove" function will take care of wholesale clearing.
-                            // If we want VisualCheck to also clear cells that *no longer* qualify,
-                            // the logic would be more complex here.
+                            // VisualCheck only adds highlights. Cells that no longer qualify keep any
+                            // earlier highlight; the "Remove" command clears highlights wholesale.
                             continue;
                         }
 

@@ -34,7 +34,7 @@ namespace OfficePragmatics_Excel
 
                 // ---- Try to auto-detect a range from the first series ----
                 var sFirst = (Excel.Series)chart.SeriesCollection(1);
-                Excel.Range firstY = TryGetSeriesYRange(sFirst, app);   // <- NEW: works even if Values isn't a Range
+                Excel.Range firstY = TryGetSeriesYRange(sFirst, app);   // works even if Values isn't a Range
                 Excel.Range lastY = null;
 
                 if (firstY != null && serCount > 1)
@@ -191,7 +191,7 @@ namespace OfficePragmatics_Excel
             }
         }
 
-        // ---------- NEW: robust Y-range detection from a Series ----------
+        // ---------- Robust Y-range detection from a Series ----------
         private static Excel.Range TryGetSeriesYRange(Excel.Series s, Excel.Application app)
         {
             if (s == null) return null;

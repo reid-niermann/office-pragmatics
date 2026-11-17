@@ -111,7 +111,7 @@ namespace OfficePragmatics_Excel
                     }
                     if (isFinancial) continue;
 
-                    // ... (The rest of your existing formula-checking logic is fine)
+                    // Link checks
                     bool hasExternalLink = formula.Contains("["); // Simplified check
                     bool hasInternalLink = formula.Contains("!");
 

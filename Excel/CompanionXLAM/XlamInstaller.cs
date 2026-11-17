@@ -16,7 +16,7 @@ namespace OfficePragmatics_Excel.Helpers
     internal static class XlamInstaller
     {
         private const string XlamFileName = "Pragmatics Companion.xlam";
-        // Ensure this namespace matches your Embedded Resource location exactly
+        // Must match the embedded resource name exactly
         private const string ResName = "OfficePragmatics_Excel.CompanionXLAM." + XlamFileName;
 
         private static string _targetPath;

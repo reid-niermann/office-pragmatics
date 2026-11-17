@@ -1,5 +1,4 @@
 ﻿// TraceDependent.cs – Trace Dependents with colour “breadcrumb”
-// C# 7.2-compatible – paste into your VSTO project as-is
 
 using System;
 using System.Collections.Generic;

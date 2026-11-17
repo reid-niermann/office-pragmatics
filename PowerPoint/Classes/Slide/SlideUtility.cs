@@ -89,7 +89,7 @@ namespace OfficePragmatics_PowerPoint.Slide
 
                 var tr = fn.TextFrame.TextRange;
 
-                // CHANGED: "Note: " (space) instead of "Note:\t" (tab)
+                // "Note: " with a space, not a tab
                 tr.Text = "Note: Placeholder.\rPlaceholder\rSource: Placeholder";
 
                 tr.Font.Name = settings.FootnoteFontName;

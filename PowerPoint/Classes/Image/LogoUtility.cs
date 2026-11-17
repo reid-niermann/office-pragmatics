@@ -919,7 +919,7 @@ namespace OfficePragmatics_PowerPoint.Image
                     Dock = DockStyle.Right,
                     Width = (int)(100 * scale),
                     FlatStyle = FlatStyle.Flat,
-                    // UPDATED: Button now matches the Title Bar (Deep Navy)
+                    // Button matches the Title Bar (Deep Navy)
                     BackColor = UIColors.TitleBg,
                     ForeColor = UIColors.TitleText,
                     Cursor = Cursors.Hand,
@@ -993,7 +993,7 @@ namespace OfficePragmatics_PowerPoint.Image
                 {
                     Dock = DockStyle.Bottom,
                     Height = (int)(30 * scale),
-                    // UPDATED: Back to White Surface
+                    // White surface
                     BackColor = UIColors.Surface,
                     Padding = new Padding(10, 0, 0, 0)
                 };
@@ -1007,7 +1007,7 @@ namespace OfficePragmatics_PowerPoint.Image
                     Dock = DockStyle.Fill,
                     TextAlign = SD.ContentAlignment.MiddleLeft,
                     Font = new SD.Font("Segoe UI", 9f),
-                    // UPDATED: Text back to standard gray
+                    // Standard gray text
                     ForeColor = UIColors.TextSecondary
                 };
                 pnlStatus.Controls.Add(_lblStatus);
