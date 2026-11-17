@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
-  <Package Id="Office_Pragmatics.Installer" Name="Office Pragmatics" Manufacturer="Office Pragmatics LLC" Version="1.0.0.86">
+  <Package Id="Office_Pragmatics.Installer" Name="Office Pragmatics" Manufacturer="Office Pragmatics LLC" Version="1.0.1.0">
     <MajorUpgrade DowngradeErrorMessage="A newer version of this        is already installed." />
     <Media Id="1" Cabinet="OfficePragmatics.cab" EmbedCab="yes" />
     <!-- ===== Close MS Office Applications ===== -->
