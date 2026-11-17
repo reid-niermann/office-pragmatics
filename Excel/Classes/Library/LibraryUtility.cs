@@ -1189,7 +1189,7 @@ namespace OfficePragmatics_Excel.Library
             try
             {
                 activeSheet = _xl.ActiveSheet as Excel.Worksheet;
-                src = _xl.Workbooks.Open(asset.FilePath, ReadOnly: true);
+                src = OpenWithoutEvents(asset.FilePath);
 
                 int insertIndex = targetWb.Sheets.Count;
                 if (activeSheet != null) insertIndex = activeSheet.Index;
@@ -1206,11 +1206,32 @@ namespace OfficePragmatics_Excel.Library
             {
                 if (src != null)
                 {
-                    try { src.Close(SaveChanges: false); } catch { }
+                    CloseWithoutEvents(src);
                     Marshal.ReleaseComObject(src);
                 }
                 if (activeSheet != null) Marshal.ReleaseComObject(activeSheet);
             }
+        }
+
+        // Insert Sheets opens and closes the library file in the background with Excel events
+        // paused, so code inside it (Workbook_Open, Workbook_BeforeClose) doesn't run just
+        // because its sheets are being copied. The copy itself runs with events on, as before.
+        private Excel.Workbook OpenWithoutEvents(string path)
+        {
+            bool events = true;
+            try { events = _xl.EnableEvents; } catch { }
+            try { _xl.EnableEvents = false; } catch { }
+            try { return _xl.Workbooks.Open(path, ReadOnly: true); }
+            finally { try { _xl.EnableEvents = events; } catch { } }
+        }
+
+        private void CloseWithoutEvents(Excel.Workbook wb)
+        {
+            bool events = true;
+            try { events = _xl.EnableEvents; } catch { }
+            try { _xl.EnableEvents = false; } catch { }
+            try { wb.Close(SaveChanges: false); } catch { }
+            finally { try { _xl.EnableEvents = events; } catch { } }
         }
 
         private void OpenWorkbookFromLibrary(LibraryAsset asset)

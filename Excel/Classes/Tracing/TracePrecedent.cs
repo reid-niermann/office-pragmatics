@@ -862,7 +862,7 @@ namespace OfficePragmatics_Excel
                 _titleFont?.Dispose();
                 _closeButtonFont?.Dispose();
 
-                if (!_keepExposed) { RestoreHidden(); try { SafeSelect(_initialOriginCell); } catch { } foreach (var wb in _workbooksToClose) { try { wb.Close(SaveChanges: false); } catch { } } }
+                if (!_keepExposed) { RestoreHidden(); try { SafeSelect(_initialOriginCell); } catch { } foreach (var wb in _workbooksToClose) { CloseTracedWorkbook(wb); } }
                 else
                 {
                     if (_cur >= 0 && _cur < _shown.Count)
@@ -876,15 +876,15 @@ namespace OfficePragmatics_Excel
                                 var initialWorkbook = (Excel.Workbook)_initialOriginCell.Worksheet.Parent;
                                 if (currentWorkbook.Name != initialWorkbook.Name)
                                 {
-                                    foreach (var wb in _workbooksToClose.ToList()) { if (wb.Name != currentWorkbook.Name) { try { wb.Close(SaveChanges: false); } catch { } _workbooksToClose.Remove(wb); } }
+                                    foreach (var wb in _workbooksToClose.ToList()) { if (wb.Name != currentWorkbook.Name) { CloseTracedWorkbook(wb); _workbooksToClose.Remove(wb); } }
                                 }
-                                else { foreach (var wb in _workbooksToClose) { try { wb.Close(SaveChanges: false); } catch { } } }
+                                else { foreach (var wb in _workbooksToClose) { CloseTracedWorkbook(wb); } }
                             }
-                            catch { foreach (var wb in _workbooksToClose) { try { wb.Close(SaveChanges: false); } catch { } } }
+                            catch { foreach (var wb in _workbooksToClose) { CloseTracedWorkbook(wb); } }
                         }
-                        else { foreach (var wb in _workbooksToClose) { try { wb.Close(SaveChanges: false); } catch { } } }
+                        else { foreach (var wb in _workbooksToClose) { CloseTracedWorkbook(wb); } }
                     }
-                    else { foreach (var wb in _workbooksToClose) { try { wb.Close(SaveChanges: false); } catch { } } }
+                    else { foreach (var wb in _workbooksToClose) { CloseTracedWorkbook(wb); } }
                 }
                 foreach (var wb in _workbooksToClose) { try { Marshal.ReleaseComObject(wb); } catch { } }
                 _workbooksToClose.Clear();
@@ -901,6 +901,27 @@ namespace OfficePragmatics_Excel
                 return fullPath;
             }
 
+            // Workbooks that Trace opens or closes in the background do so with Excel events
+            // paused, so code inside them (Workbook_Open, Workbook_BeforeClose) doesn't run
+            // just because a formula points at them. Reading cells and formulas is unaffected.
+            private Excel.Workbook OpenTracedWorkbook(string bookPath)
+            {
+                bool events = true;
+                try { events = _cachedApp.EnableEvents; } catch { }
+                try { _cachedApp.EnableEvents = false; } catch { }
+                try { return _cachedApp.Workbooks.Open(bookPath, ReadOnly: true, UpdateLinks: 0); }
+                finally { try { _cachedApp.EnableEvents = events; } catch { } }
+            }
+
+            private void CloseTracedWorkbook(Excel.Workbook wb)
+            {
+                bool events = true;
+                try { events = _cachedApp.EnableEvents; } catch { }
+                try { _cachedApp.EnableEvents = false; } catch { }
+                try { wb.Close(SaveChanges: false); } catch { }
+                finally { try { _cachedApp.EnableEvents = events; } catch { } }
+            }
+
             private Excel.Range ResolveClosedReference(string refText)
             {
                 string bookPath = ExtractWorkbookPath(refText);
@@ -909,7 +930,7 @@ namespace OfficePragmatics_Excel
                 try
                 {
                     this.TopMost = true;
-                    try { var wb = _cachedApp.Workbooks.Open(bookPath, ReadOnly: true, UpdateLinks: 0); _workbooksToClose.Add(wb); }
+                    try { var wb = OpenTracedWorkbook(bookPath); _workbooksToClose.Add(wb); }
                     finally { this.TopMost = true; this.Activate(); }
                     return _cachedApp.Range[refText];
                 }
