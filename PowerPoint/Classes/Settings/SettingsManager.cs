@@ -64,7 +64,7 @@ namespace OfficePragmatics_PowerPoint.Settings
 
         public static string JsonPath => Path.Combine(AppDataDir, JsonFileName);
 
-        // CHANGED: Current is now backed by a field to support lazy loading
+        // Current is backed by a field to support lazy loading
         private static AllSettings _current;
         public static AllSettings Current
         {

@@ -1041,7 +1041,7 @@ namespace OfficePragmatics_Excel
                     return fastResult;
                 }
 
-                // FIXED: Added .Trim() to remove accounting format padding (e.g. _(* )
+                // Trim removes accounting format padding (e.g. _(* )
                 try { string result = _cachedApp.WorksheetFunction.Text(rawValue, cleanFmt).Trim(); if (_valueCache.Count < 500) _valueCache[rng] = result; return result; }
                 catch { try { string result = rawValue.ToString().Trim(); if (_valueCache.Count < 500) _valueCache[rng] = result; return result; } catch { return ""; } }
             }
@@ -1163,7 +1163,7 @@ namespace OfficePragmatics_Excel
                         }
                         int offset = 6 + info.Level * INDENT;
                         var rect = new Rectangle(e.Bounds.Left + offset, e.Bounds.Top, e.Bounds.Width - offset, e.Bounds.Height);
-                        // FIXED: Added EndEllipsis to add "..." for long text
+                        // EndEllipsis adds "..." to long text
                         TextRenderer.DrawText(e.Graphics, e.SubItem.Text, e.Item.Font, rect, txt, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
                         break;
                     case 1:
@@ -1171,7 +1171,7 @@ namespace OfficePragmatics_Excel
                         break;
                     case 2:
                         var valRect = new Rectangle(e.Bounds.Left + 4, e.Bounds.Top, e.Bounds.Width - 4, e.Bounds.Height);
-                        // FIXED: Added EndEllipsis to add "..." for long text
+                        // EndEllipsis adds "..." to long text
                         TextRenderer.DrawText(e.Graphics, e.SubItem.Text, e.SubItem.Font, valRect, txt, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
                         break;
                     default:

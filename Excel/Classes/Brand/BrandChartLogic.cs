@@ -24,7 +24,7 @@ namespace OfficePragmatics_Excel.Classes.Brand
 
         public Excel.XlChartType ChartType { get; set; }
 
-        // NEW: If this format is just an alias, point to another chart type
+        // If this format is just an alias, point to another chart type
         public Excel.XlChartType? SameAsChartType { get; set; }
 
         // (Name removed from UI; keep internally if you like, but unused)

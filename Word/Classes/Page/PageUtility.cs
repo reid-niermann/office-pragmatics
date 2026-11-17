@@ -121,8 +121,7 @@ namespace OfficePragmatics_Word.Page
             catch { /* safe to ignore */ }
         }
 
-        // Your lightweight input UI, unchanged
-        // Your lightweight input UI, updated for DPI/Resolution scaling
+        // Lightweight input UI, scaled for DPI
         private class GoToPageForm : Form
         {
             private string _pageInfo;

@@ -650,7 +650,7 @@ namespace OfficePragmatics_PowerPoint.Map
                 };
                 okBtn.FlatAppearance.BorderSize = 0;
 
-                // ── CRITICAL FIX: Ensure Data is Committed on OK/Enter ──
+                // ── Ensure Data is Committed on OK/Enter ──
                 okBtn.Click += (s, e) => {
                     if (grid.IsCurrentCellInEditMode)
                     {

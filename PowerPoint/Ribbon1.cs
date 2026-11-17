@@ -71,7 +71,7 @@ namespace OfficePragmatics_Powerpoint
             }
         }
 
-        // Corrected: The 'selectedId' parameter was unused and is now renamed to '_'
+        // The selectedId parameter is unused, hence '_'
         public void OnLinkGalleryItemClicked(Office.IRibbonControl control, string _, int selectedIndex)
         {
             _linkMatchSelectedIndex = selectedIndex;
@@ -105,7 +105,7 @@ namespace OfficePragmatics_Powerpoint
             }
         }
 
-        // Corrected: Restored the original method signature that other classes depend on.
+        // Other classes depend on this signature.
         public string GetCurrentImportMatchType()
         {
             switch (_linkMatchSelectedIndex)

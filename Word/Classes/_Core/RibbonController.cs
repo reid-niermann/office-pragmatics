@@ -494,7 +494,6 @@ namespace Office_Pragmatics_Word
         private Word.Selection GetSelection() => GetApplication().Selection;
 
         // Note: Word doesn't have a direct equivalent to PowerPoint's ShapeRange
-        // You may need to adapt this based on your Word implementation
         private Word.ShapeRange GetShapeRange()
         {
             if (GetSelection().ShapeRange != null && GetSelection().ShapeRange.Count > 0)

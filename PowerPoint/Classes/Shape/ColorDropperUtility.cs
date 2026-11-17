@@ -54,7 +54,7 @@ namespace OfficePragmatics_PowerPoint.Shape
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool GetCursorPos(out POINT lpPoint);
 
-        // NEW: Win32 API for simulating a mouse click
+        // Win32 API for simulating a mouse click
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
 
@@ -140,7 +140,7 @@ namespace OfficePragmatics_PowerPoint.Shape
 
                 Application.DoEvents();
 
-                // MODIFIED: Capture final cursor position and pass it to the apply function
+                // Capture final cursor position and pass it to the apply function
                 GetCursorPos(out pt);
                 System.Drawing.Color picked = GetScreenColor(pt.X, pt.Y);
                 int oleColor = picked.R | (picked.G << 8) | (picked.B << 16);
@@ -165,7 +165,7 @@ namespace OfficePragmatics_PowerPoint.Shape
                 try
                 {
                     info.Chart = selection.ShapeRange[1].Chart;
-                    // This direct access can be unreliable, which is why the new method is better
+                    // Direct access can be unreliable, so charts use the native eyedropper (below)
                     info.ChartSelection = info.Chart.Application.ActiveWindow.Selection.Parent;
                     info.IsChartSelection = true;
                     info.Shapes = selection.ShapeRange;
@@ -254,10 +254,10 @@ namespace OfficePragmatics_PowerPoint.Shape
             }
         }
 
-        // MODIFIED: Accepts cursor position to handle chart clicks
+        // Accepts cursor position to handle chart clicks
         private static void ApplyColorToSelection(SelectionInfo selectionInfo, int oleColor, POINT cursorPosition)
         {
-            // MODIFIED: New method for charts using the native eyedropper
+            // Charts use the native eyedropper
             if (selectionInfo.IsChartSelection)
             {
                 string msoCommand = "";

@@ -207,7 +207,7 @@ namespace OfficePragmatics_Excel
 
             OpenSettings opts = new OpenSettings { AutoSave = true };
 
-            // FIX: Opened directly by path to avoid VSTO IsolatedStorageException (Identity of domain)
+            // Open directly by path to avoid VSTO IsolatedStorageException (Identity of domain)
             using (SpreadsheetDocument doc = SpreadsheetDocument.Open(workingPath, true, opts))
             {
                 WorkbookPart wp = doc.WorkbookPart;

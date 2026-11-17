@@ -79,10 +79,8 @@ namespace OfficePragmatics_Excel
             {
                 if (_utilities == null) _utilities = new AddInUtilities();
 
-                // This calls your RegisterShortcuts logic.
-                // Ensure your AddInUtilities.RegisterShortcuts() still has the check:
-                // "if (app.Workbooks.Count == 0) return;" 
-                // This prevents errors if this event fires weirdly early.
+                // RegisterShortcuts() returns early when no workbook is open,
+                // so this is safe even if the event fires early.
                 _utilities.RegisterShortcuts();
             }
             catch { }

@@ -71,7 +71,7 @@ namespace OfficePragmatics_Excel
         private struct RECT { public int Left, Top, Right, Bottom; }
 
         /// <summary>
-        /// Cycles through your 6 border‑styles on the current selection,
+        /// Cycles through the 6 border styles on the current selection,
         /// then pops up a 3‑second “Applied: …” indicator.
         /// </summary>
         public static void RunBorderCycle()

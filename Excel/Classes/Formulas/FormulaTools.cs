@@ -338,7 +338,7 @@ namespace OfficePragmatics_Excel.Classes
                 RegexOptions.IgnoreCase);
         }
 
-        /* ─────────────────────────  ORIGINAL HELPERS  ───────────────────────── */
+        /* ─────────────────────────  SHARED  HELPERS  ───────────────────────── */
 
         /* MAGNITUDE ±10^n  (now n = ±3) */
         public static string AdjustPowerOfTen(string formula, int delta)
