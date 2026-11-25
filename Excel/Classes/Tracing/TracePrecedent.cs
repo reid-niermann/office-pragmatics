@@ -33,27 +33,21 @@ namespace OfficePragmatics_Excel
             control.Refresh();
         }
 
-        /* ───────── static, compiled regex – parsed once ───────── */
-        private static readonly Regex FuncRx = new Regex(
-            @"\b[A-Za-z_][A-Za-z0-9_]*\s*\(",
-            RegexOptions.Compiled | RegexOptions.CultureInvariant);
-
-        private static readonly Regex RefRx = new Regex(
-            @"(?:(?:'[^']+'|[^!,\s()+\-*/^<>]+)!)?" +
-            "(" +
-                @"(?:\b\w+\[[^\]]*\]|@\[[^\]]*\]|\[\[[^\]]*\]\])" +
-                "|" +
-                @"\$?[A-Za-z]{1,3}\$?\d+(?::\$?[A-Za-z]{1,3}\$?\d+)?" +
-                "|" +
-                @"\$?[A-Za-z]{1,3}:\$?[A-Za-z]{1,3}" +
-                "|" +
-                @"\$?\d+:\$?\d+" +
-            ")",
-            RegexOptions.Compiled | RegexOptions.CultureInvariant);
-
+        // Quoted reference into another workbook with its folder, e.g. 'C:\Deals\[Target.xlsx]P&L'!,
+        // '\\server\share\[Target.xlsx]PL'! or 'https://…/Shared Documents/[Target.xlsx]PL'!.
+        // The window shows these without the folder.
         private static readonly Regex ExternalPathRx = new Regex(
-            @"'(?<path>[A-Za-z]:\\[^']*?)\[(?<book>[^\]]+)\](?<sheet>[^']+)'(?<bang>!)",
+            @"'(?<path>(?:[^'\[]|'')+?)\[(?<book>[^\]]+)\](?<sheet>(?:[^']|'')+)'(?<bang>!)",
             RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+        // Splits a reference into another workbook: 'folder[Book]Sheet'!Address or [Book]Sheet!Address.
+        private static readonly Regex ExternalRefRx = new Regex(
+            @"^'(?<path>(?:[^'\[]|'')*)\[(?<book>(?:[^\]']|'')+)\](?<sheet>(?:[^']|'')+)'!(?<addr>.+)$|^\[(?<book>[^\]]+)\](?<sheet>[^!']+)!(?<addr>.+)$",
+            RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+        private const int XlErrName = -2146826259;    // #NAME?
+        private const int XlErrValue = -2146826273;   // #VALUE!
+        private const int EvaluateLimit = 255;        // longest formula Excel's Evaluate accepts
 
         private static readonly FieldInfo BfStart = typeof(PrecedentInfo).GetField(
             "<Start>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -74,6 +68,10 @@ namespace OfficePragmatics_Excel
 
         public static void Run(Excel.Application app)
         {
+            // Function values and number formats are cached only for this trace, so they're never stale.
+            _evalCache.Clear();
+            _fmtCache.Clear();
+
             var activeCell = app.ActiveCell as Excel.Range;
             RevertBackwards.SaveCurrentCell(activeCell);
             if (activeCell == null)
@@ -106,7 +104,7 @@ namespace OfficePragmatics_Excel
                 app.ScreenUpdating = scrn;
             }
 
-            precedents.Sort((a, b) => a.Start.CompareTo(b.Start));
+            precedents = SortByStart(precedents);
             var form = new PrecedentsForm(formula, precedents, activeCell);
             form.Show();
         }
@@ -167,7 +165,8 @@ namespace OfficePragmatics_Excel
                         }
                     }
                 }
-                if (p.IsReference && !string.IsNullOrEmpty(p.DisplayText)) len = p.DisplayText.Length;
+                string spanText = p.SpanText ?? p.DisplayText;
+                if (p.IsReference && !string.IsNullOrEmpty(spanText)) len = spanText.Length;
                 BfStart?.SetValue(p, start);
                 BfLen?.SetValue(p, len);
             }
@@ -179,20 +178,14 @@ namespace OfficePragmatics_Excel
 
             foreach (var p in precs)
             {
-                if (p.IsReference) continue;
+                if (p.IsReference || p.IsName) continue;   // only function calls and ( ) groups
                 int s = p.Start;
                 if (s < 0 || s >= displayed.Length) continue;
                 int open = (displayed[s] == '(') ? s : displayed.IndexOf('(', s);
                 if (open < 0) continue;
-                int depth = 1, i = open + 1;
-                while (i < displayed.Length && depth > 0)
-                {
-                    char c = displayed[i];
-                    if (c == '(') depth++; else if (c == ')') depth--;
-                    i++;
-                }
-                if (depth != 0) continue;
-                int newLen = i - s;
+                int close = FormulaScanner.FindMatchingParen(displayed, open);
+                if (close < 0) continue;
+                int newLen = close + 1 - s;
                 if (newLen > 0) BfLen?.SetValue(p, newLen);
             }
         }
@@ -231,101 +224,256 @@ namespace OfficePragmatics_Excel
 
         private static void ParseFormula(Excel.Application app, string formula, Excel.Range activeCell, List<PrecedentInfo> precedents)
         {
-            var funcMatches = FuncRx.Matches(formula);
-            var refMatches = RefRx.Matches(formula);
-
+            string sheetKey = SheetKey(activeCell);
             var rangeLookupCache = new Dictionary<string, Excel.Range>(StringComparer.OrdinalIgnoreCase);
-            var processedRanges = new HashSet<int>(refMatches.Count);
+            var nameLookupCache = new Dictionary<string, (bool IsName, Excel.Range Range, string Value)>(StringComparer.OrdinalIgnoreCase);
 
-            foreach (Match m in funcMatches)
+            foreach (var t in FormulaScanner.Scan(formula))
             {
-                int funcStart = m.Index;
-                int paren = m.Index + m.Length - 1;
-                int depth = 1, pos = paren + 1;
-                while (pos < formula.Length && depth > 0)
+                switch (t.Kind)
                 {
-                    char c = formula[pos];
-                    if (c == '(') depth++; else if (c == ')') depth--;
-                    pos++;
-                }
-                if (depth != 0) continue;
-                int funcLen = pos - funcStart;
-                string fText = formula.Substring(funcStart, funcLen);
-                string val = GetCachedEvaluation(app, fText, activeCell);
-                precedents.Add(new PrecedentInfo(fText, funcStart, funcLen, val));
-            }
-
-            ParseBareParentheses(app, formula, activeCell, precedents);
-
-            foreach (Match m in refMatches)
-            {
-                if (processedRanges.Contains(m.Index)) continue;
-                processedRanges.Add(m.Index);
-                string refText = m.Value;
-                string simplified = SimplifyExternalReference(refText);
-
-                Excel.Range rng;
-                if (!rangeLookupCache.TryGetValue(refText, out rng))
-                {
-                    rng = TryGetOpenRange(app, refText);
-                    rangeLookupCache[refText] = rng;
-                }
-
-                precedents.Add(new PrecedentInfo(rng, simplified, m.Index, m.Length));
-            }
-        }
-
-        private static Excel.Range TryGetOpenRange(Excel.Application app, string refText)
-        {
-            try { return app.Range[refText]; } catch { return null; }
-        }
-
-        private static void ParseBareParentheses(Excel.Application app, string formula, Excel.Range activeCell, List<PrecedentInfo> precedents)
-        {
-            var parenStack = new Stack<int>(16);
-            var funcMatches = FuncRx.Matches(formula);
-            var funcStarts = new HashSet<int>(funcMatches.Count);
-            foreach (Match m in funcMatches) funcStarts.Add(m.Index + m.Length - 1);
-
-            for (int i = 0; i < formula.Length; i++)
-            {
-                if (formula[i] == '(')
-                {
-                    if (!funcStarts.Contains(i))
-                    {
-                        int k = i - 1;
-                        while (k >= 0 && char.IsWhiteSpace(formula[k])) k--;
-                        bool preceded = k >= 0 && (char.IsLetterOrDigit(formula[k]) || formula[k] == '_');
-                        if (!preceded) parenStack.Push(i);
-                    }
-                }
-                else if (formula[i] == ')' && parenStack.Count > 0)
-                {
-                    int start = parenStack.Pop();
-                    string grpText = formula.Substring(start, i - start + 1);
-                    string val = GetCachedEvaluation(app, grpText, activeCell);
-                    precedents.Add(new PrecedentInfo("( )", start, i - start + 1, val));
+                    case FormulaScanner.TokenKind.Function:
+                        precedents.Add(new PrecedentInfo(t.Text, t.Start, t.Length, GetCachedEvaluation(app, t.Text, activeCell, formula, sheetKey)));
+                        break;
+                    case FormulaScanner.TokenKind.Group:
+                        precedents.Add(new PrecedentInfo("( )", t.Start, t.Length, GetCachedEvaluation(app, t.Text, activeCell, formula, sheetKey)));
+                        break;
+                    case FormulaScanner.TokenKind.Reference:
+                        AddReference(app, activeCell, t, precedents, rangeLookupCache);
+                        break;
+                    case FormulaScanner.TokenKind.Name:
+                        AddName(app, activeCell, t, precedents, nameLookupCache);
+                        break;
                 }
             }
         }
 
-        private static string GetCachedEvaluation(Excel.Application app, string funcText, Excel.Range originCell)
+        private static void AddReference(Excel.Application app, Excel.Range originCell, FormulaScanner.Token t, List<PrecedentInfo> precedents, Dictionary<string, Excel.Range> cache)
         {
-            if (_evalCache.TryGetValue(funcText, out string cached)) return cached;
-            string result = EvaluateFunctionFormatted(app, funcText, originCell);
-            if (_evalCache.Count < 1000) _evalCache[funcText] = result;
+            string refText = t.Text;
+            string shown = SimplifyExternalReference(refText);
+
+            // Sheet1:Sheet3!A1 is A1 on every sheet from Sheet1 to Sheet3: one entry per sheet.
+            var perSheet = Expand3DReference(originCell, refText, t.PrefixLength);
+            if (perSheet != null)
+            {
+                foreach (var s in perSheet)
+                    precedents.Add(new PrecedentInfo(s.Value, s.Key, t.Start, t.Length) { RefText = refText, SpanText = shown });
+                return;
+            }
+
+            if (!cache.TryGetValue(refText, out Excel.Range rng))
+            {
+                rng = IsTableReference(refText, t.PrefixLength)
+                    ? ResolveTableReference(app, originCell, refText, t.PrefixLength)
+                    : ResolveReference(app, originCell, refText, t.PrefixLength);
+                cache[refText] = rng;
+            }
+            precedents.Add(new PrecedentInfo(rng, shown, t.Start, t.Length) { RefText = refText });
+        }
+
+        // Defined names. A name that refers to cells is listed like any other reference; a name that holds
+        // a constant or a formula is listed with its value. Words that aren't defined names (such as LET
+        // variables) are left out.
+        private static void AddName(Excel.Application app, Excel.Range originCell, FormulaScanner.Token t, List<PrecedentInfo> precedents, Dictionary<string, (bool IsName, Excel.Range Range, string Value)> cache)
+        {
+            if (!cache.TryGetValue(t.Text, out var hit))
+            {
+                hit = (false, null, null);
+                if (TryResolveName(originCell, t.Text, t.PrefixLength, out Excel.Range range, out object value))
+                    hit = (true, range, range == null ? FormatWithExcel(app, value, "General") : null);
+                cache[t.Text] = hit;
+            }
+            if (!hit.IsName) return;
+            if (hit.Range != null) precedents.Add(new PrecedentInfo(hit.Range, t.Text, t.Start, t.Length) { RefText = t.Text, IsName = true });
+            else precedents.Add(new PrecedentInfo(t.Text, t.Start, t.Length, hit.Value ?? "") { IsName = true });
+        }
+
+        private static bool TryResolveName(Excel.Range originCell, string nameText, int prefixLength, out Excel.Range range, out object value)
+        {
+            range = null;
+            value = null;
+            object v;
+            try { v = ((Excel.Worksheet)originCell.Worksheet).Evaluate(nameText); } catch { return false; }
+            if (v == null) return false;
+            range = v as Excel.Range;
+            if (range != null) return true;
+            if (v is int code && code == XlErrName) return false;      // not a defined name
+            if (prefixLength > 0 && IsExcelError(v)) return false;     // e.g. a name in a workbook that isn't open
+            value = v;
+            return true;
+        }
+
+        // A1-style reference, with or without a sheet prefix. An address without a sheet belongs to the
+        // sheet of the formula being traced, so it's looked up there rather than on the active sheet.
+        private static Excel.Range ResolveReference(Excel.Application app, Excel.Range originCell, string refText, int prefixLength)
+        {
+            try { return prefixLength > 0 ? app.Range[refText] : ((Excel.Worksheet)originCell.Worksheet).Range[refText]; }
+            catch { }
+            if (refText.EndsWith("#", StringComparison.Ordinal))
+            {
+                // Spill reference (A1#): resolve the whole spill range, or fall back to the anchor cell.
+                return EvaluateAsRange(originCell, refText) ?? ResolveReference(app, originCell, refText.Substring(0, refText.Length - 1), prefixLength);
+            }
+            return null;
+        }
+
+        private static bool IsTableReference(string refText, int prefixLength) => refText.IndexOf('[', prefixLength) >= 0;
+
+        // Table references. "This row" forms ([@Sales], Table1[[#This Row],[Sales]]) are resolved to the
+        // column and then narrowed to the row of the formula being traced.
+        private static Excel.Range ResolveTableReference(Excel.Application app, Excel.Range originCell, string refText, int prefixLength)
+        {
+            int b = refText.IndexOf('[', prefixLength);
+            if (b < 0) return null;
+            string table = refText.Substring(0, b);
+            string spec = refText.Substring(b);
+            bool thisRow = false;
+            if (spec.StartsWith("[@", StringComparison.Ordinal) && spec.Length >= 3)
+            {
+                thisRow = true;
+                string rest = spec.Substring(2, spec.Length - 3);
+                spec = rest.Length == 0 ? "" : "[" + rest + "]";
+            }
+            else if (spec.StartsWith("[[#This Row],", StringComparison.OrdinalIgnoreCase))
+            {
+                thisRow = true;
+                spec = "[" + spec.Substring("[[#This Row],".Length);
+            }
+            else if (spec.Equals("[#This Row]", StringComparison.OrdinalIgnoreCase))
+            {
+                thisRow = true;
+                spec = "";
+            }
+
+            if (table.Length == 0)
+            {
+                // [@Sales] inside a table: the table is the one the traced cell sits in.
+                try { table = originCell.ListObject?.Name; } catch { table = null; }
+                if (string.IsNullOrEmpty(table)) return null;
+            }
+
+            string text = table + spec;
+            Excel.Range rng = null;
+            if (!thisRow) { try { rng = app.Range[text]; } catch { } }
+            if (rng == null) rng = EvaluateAsRange(originCell, text);
+            if (rng == null || !thisRow) return rng;
+            try { return app.Intersect(rng, originCell.EntireRow); } catch { return null; }
+        }
+
+        // Sheet1:Sheet3!A1 refers to A1 on every worksheet from Sheet1 to Sheet3. Returns one (label, range)
+        // per sheet, or null if this isn't a 3D reference or its sheets can't be found.
+        private static List<KeyValuePair<string, Excel.Range>> Expand3DReference(Excel.Range originCell, string refText, int prefixLength)
+        {
+            if (prefixLength < 2) return null;
+            string prefix = refText.Substring(0, prefixLength - 1);   // without the '!'
+            string local = refText.Substring(prefixLength);
+            if (prefix.Length >= 2 && prefix[0] == '\'' && prefix[prefix.Length - 1] == '\'')
+                prefix = prefix.Substring(1, prefix.Length - 2).Replace("''", "'");
+            string book = null;
+            int rb = prefix.LastIndexOf(']');
+            if (rb >= 0)
+            {
+                int lb = prefix.LastIndexOf('[', rb);
+                if (lb != 0) return null;   // a folder in front means the workbook is closed
+                book = prefix.Substring(1, rb - 1);
+                prefix = prefix.Substring(rb + 1);
+            }
+            int colon = prefix.IndexOf(':');
+            if (colon <= 0 || colon == prefix.Length - 1) return null;
+            string first = prefix.Substring(0, colon), last = prefix.Substring(colon + 1);
+
+            try
+            {
+                var wb = (Excel.Workbook)((Excel.Worksheet)originCell.Worksheet).Parent;
+                if (book != null)
+                {
+                    wb = null;
+                    foreach (Excel.Workbook open in originCell.Application.Workbooks)
+                        if (string.Equals(open.Name, book, StringComparison.OrdinalIgnoreCase)) { wb = open; break; }
+                    if (wb == null) return null;
+                }
+
+                var sheets = new List<Excel.Worksheet>();
+                int a = -1, z = -1;
+                foreach (Excel.Worksheet ws in wb.Worksheets)
+                {
+                    if (string.Equals(ws.Name, first, StringComparison.OrdinalIgnoreCase)) a = sheets.Count;
+                    if (string.Equals(ws.Name, last, StringComparison.OrdinalIgnoreCase)) z = sheets.Count;
+                    sheets.Add(ws);
+                }
+                if (a < 0 || z < 0) return null;
+                if (a > z) { int tmp = a; a = z; z = tmp; }
+
+                var result = new List<KeyValuePair<string, Excel.Range>>(z - a + 1);
+                for (int i = a; i <= z; i++)
+                {
+                    string label = (book != null ? "[" + book + "]" + sheets[i].Name : QuoteSheetName(sheets[i].Name)) + "!" + local;
+                    result.Add(new KeyValuePair<string, Excel.Range>(label, sheets[i].Range[local]));
+                }
+                return result;
+            }
+            catch { return null; }
+        }
+
+        private static string QuoteSheetName(string name)
+        {
+            bool plain = name.Length > 0 && !char.IsDigit(name[0]);
+            foreach (char c in name)
+                if (!(char.IsLetterOrDigit(c) || c == '_' || c == '.')) { plain = false; break; }
+            return plain ? name : "'" + name.Replace("'", "''") + "'";
+        }
+
+        private static Excel.Range EvaluateAsRange(Excel.Range originCell, string text)
+        {
+            try { object v = ((Excel.Worksheet)originCell.Worksheet).Evaluate(text); return v as Excel.Range; }
+            catch { return null; }
+        }
+
+        private static string SheetKey(Excel.Range cell)
+        {
+            try
+            {
+                var ws = (Excel.Worksheet)cell.Worksheet;
+                return ((Excel.Workbook)ws.Parent).FullName + "|" + ws.Name;
+            }
+            catch { return ""; }
+        }
+
+        private static List<PrecedentInfo> SortByStart(List<PrecedentInfo> precedents) => precedents.OrderBy(p => p.Start).ToList();
+
+        private static string GetCachedEvaluation(Excel.Application app, string funcText, Excel.Range originCell, string formula, string sheetKey)
+        {
+            // The same text on another sheet is a different calculation, so the sheet is part of the key.
+            string key = sheetKey + "\u0001" + funcText;
+            if (_evalCache.TryGetValue(key, out string cached)) return cached;
+            string result = EvaluateFunctionFormatted(app, funcText, originCell, formula);
+            if (_evalCache.Count < 1000) _evalCache[key] = result;
             return result;
         }
 
-        private static string EvaluateFunctionFormatted(Excel.Application app, string funcText, Excel.Range originCell)
+        private static string EvaluateFunctionFormatted(Excel.Application app, string funcText, Excel.Range originCell, string formula)
         {
+            var sheet = (Excel.Worksheet)originCell.Worksheet;
             object raw = null;
-            try { raw = app.Evaluate("=" + funcText); } catch { }
+            try { raw = sheet.Evaluate("=" + funcText); } catch { }
 
             if (raw == null && funcText.StartsWith("XLOOKUP(", StringComparison.OrdinalIgnoreCase))
             {
                 string converted = ConvertXLookupToIndexMatch(funcText);
-                if (!string.IsNullOrEmpty(converted)) try { raw = app.Evaluate("=" + converted); } catch { }
+                if (!string.IsNullOrEmpty(converted)) try { raw = sheet.Evaluate("=" + converted); } catch { }
+            }
+
+            // Excel's Evaluate can't take more than 255 characters and returns #VALUE! instead. When the function
+            // is the whole formula its value is the cell's own value; otherwise say so rather than show #VALUE!.
+            if (raw is int code && code == XlErrValue && funcText.Length + 1 > EvaluateLimit)
+            {
+                if (formula == null || formula.Length != funcText.Length + 1 || !formula.EndsWith(funcText, StringComparison.Ordinal))
+                    return "(too long to preview)";
+                object cellValue = null;
+                try { cellValue = originCell.Value2; } catch { }
+                if (IsExcelError(cellValue)) return ConvertExcelErrorToText(cellValue);
+                return FormatWithExcel(app, cellValue, (originCell.NumberFormat as string ?? "General").Replace("*", ""));
             }
 
             if (IsExcelError(raw)) return ConvertExcelErrorToText(raw);
@@ -336,18 +484,21 @@ namespace OfficePragmatics_Excel
         private static string DetermineNumberFormat(Excel.Application app, string funcText, Excel.Range originCell)
         {
             string commonFmt = null;
-            var matches = RefRx.Matches(funcText);
-            if (matches.Count == 0) return (originCell.NumberFormat as string ?? "General").Replace("*", "");
+            var refs = FormulaScanner.Scan(funcText).Where(t => t.Kind == FormulaScanner.TokenKind.Reference).ToList();
+            if (refs.Count == 0) return (originCell.NumberFormat as string ?? "General").Replace("*", "");
 
-            foreach (Match m in matches)
+            foreach (var t in refs)
             {
                 Excel.Range rng = null;
                 Excel.Worksheet sheet = null;
                 try
                 {
-                    rng = app.Range[m.Value];
+                    rng = IsTableReference(t.Text, t.PrefixLength)
+                        ? ResolveTableReference(app, originCell, t.Text, t.PrefixLength)
+                        : ResolveReference(app, originCell, t.Text, t.PrefixLength);
+                    if (rng == null) continue;
                     sheet = (Excel.Worksheet)rng.Worksheet;
-                    string key = $"{sheet.Name}|{rng.Address[false, false]}";
+                    string key = $"{((Excel.Workbook)sheet.Parent).Name}|{sheet.Name}|{rng.Address[false, false]}";
                     if (!_fmtCache.TryGetValue(key, out string fmt))
                     {
                         fmt = (((Excel.Range)rng.Cells[1, 1]).NumberFormat as string ?? "").Replace("*", "");
@@ -364,6 +515,299 @@ namespace OfficePragmatics_Excel
                 }
             }
             return !string.IsNullOrEmpty(commonFmt) ? commonFmt : (originCell.NumberFormat as string ?? "General").Replace("*", "");
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // Formula scanner. Reads a formula left to right and reports cell
+        // references, defined names, function calls and bracketed groups with
+        // their positions. Text inside "strings", 'quoted sheet names' and
+        // {array constants} is skipped, so a label like "FY24" or a sheet named
+        // 'Model (2)' is never mistaken for a reference or a function call.
+        // ─────────────────────────────────────────────────────────────────────
+        internal static class FormulaScanner
+        {
+            internal enum TokenKind { Reference, Name, Function, Group }
+
+            internal struct Token
+            {
+                public TokenKind Kind;
+                public int Start;
+                public int Length;
+                public string Text;
+                public int PrefixLength;   // length of a sheet/workbook prefix such as "Inputs!" (0 if none)
+            }
+
+            private const int MaxColumn = 16384;   // XFD
+            private const int MaxRow = 1048576;
+
+            internal static List<Token> Scan(string f)
+            {
+                var tokens = new List<Token>();
+                if (string.IsNullOrEmpty(f)) return tokens;
+                int n = f.Length;
+                int i = f[0] == '=' ? 1 : 0;
+                // Open brackets: Key = index of '(', Value = start of the function call it belongs to,
+                // -1 for a plain group like (1+A1), -2 for anything else (e.g. after a reference).
+                var parens = new Stack<KeyValuePair<int, int>>();
+                int pendingFuncStart = -1, pendingParen = -1;
+
+                while (i < n)
+                {
+                    char c = f[i];
+                    if (c == '"') { i = SkipString(f, i); continue; }
+                    if (c == '{') { i = SkipArrayConstant(f, i); continue; }
+                    if (c == '(')
+                    {
+                        int owner;
+                        if (i == pendingParen) owner = pendingFuncStart;
+                        else
+                        {
+                            int k = i - 1;
+                            while (k >= 0 && char.IsWhiteSpace(f[k])) k--;
+                            owner = (k >= 0 && (char.IsLetterOrDigit(f[k]) || f[k] == '_')) ? -2 : -1;
+                        }
+                        parens.Push(new KeyValuePair<int, int>(i, owner));
+                        i++;
+                        continue;
+                    }
+                    if (c == ')')
+                    {
+                        if (parens.Count > 0)
+                        {
+                            var open = parens.Pop();
+                            if (open.Value >= 0) Add(tokens, f, TokenKind.Function, open.Value, i + 1);
+                            else if (open.Value == -1) Add(tokens, f, TokenKind.Group, open.Key, i + 1);
+                        }
+                        i++;
+                        continue;
+                    }
+                    if (c == '#') { i = SkipErrorLiteral(f, i); continue; }
+                    if (c == '\'')
+                    {
+                        int j = SkipQuoted(f, i);
+                        if (j < n && f[j] == '!') { i = ReadItem(f, j + 1, i, tokens, ref pendingFuncStart, ref pendingParen); continue; }
+                        i = j;
+                        continue;
+                    }
+                    if (c == '[')
+                    {
+                        // Either a workbook prefix like [Book.xlsx]Sheet1! or a table reference like [@Sales].
+                        int close = f.IndexOf(']', i + 1);
+                        if (close > i)
+                        {
+                            int sheetEnd = ReadSheetName(f, close + 1);
+                            if (sheetEnd < n && f[sheetEnd] == '!') { i = ReadItem(f, sheetEnd + 1, i, tokens, ref pendingFuncStart, ref pendingParen); continue; }
+                        }
+                        int end = SkipBrackets(f, i);
+                        if (end > i) { Add(tokens, f, TokenKind.Reference, i, end); i = end; continue; }
+                        i++;
+                        continue;
+                    }
+                    if (IsNameStart(c))
+                    {
+                        int sheetEnd = ReadSheetName(f, i);
+                        if (sheetEnd > i && sheetEnd < n && f[sheetEnd] == '!') { i = ReadItem(f, sheetEnd + 1, i, tokens, ref pendingFuncStart, ref pendingParen); continue; }
+                        i = ReadItem(f, i, i, tokens, ref pendingFuncStart, ref pendingParen);
+                        continue;
+                    }
+                    if (c == '$' || IsDigit(c)) { i = ReadItem(f, i, i, tokens, ref pendingFuncStart, ref pendingParen); continue; }
+                    i++;
+                }
+                return tokens;
+            }
+
+            /// <summary>Index of the ')' matching the '(' at <paramref name="open"/>, skipping quoted text; -1 if none.</summary>
+            internal static int FindMatchingParen(string f, int open)
+            {
+                int depth = 0;
+                for (int j = open; j < f.Length; j++)
+                {
+                    char c = f[j];
+                    if (c == '"') { j = SkipString(f, j) - 1; continue; }
+                    if (c == '\'') { j = SkipQuoted(f, j) - 1; continue; }
+                    if (c == '(') depth++;
+                    else if (c == ')') { depth--; if (depth == 0) return j; }
+                }
+                return -1;
+            }
+
+            // Reads what follows an optional sheet prefix: a reference, a table reference, a name or a function call.
+            private static int ReadItem(string f, int pos, int tokenStart, List<Token> tokens, ref int pendingFuncStart, ref int pendingParen)
+            {
+                int n = f.Length;
+                if (pos >= n) return n;
+                char c = f[pos];
+                if (c == '#') return SkipErrorLiteral(f, pos);           // e.g. Sheet1!#REF!
+                int end = MatchA1(f, pos);
+                if (end > pos) { Add(tokens, f, TokenKind.Reference, tokenStart, end, pos - tokenStart); return end; }
+                if (IsNameStart(c))
+                {
+                    int e = pos + 1;
+                    while (e < n && IsNameChar(f[e])) e++;
+                    if (e < n && f[e] == '[')
+                    {
+                        int b = SkipBrackets(f, e);
+                        if (b > e) { Add(tokens, f, TokenKind.Reference, tokenStart, b, pos - tokenStart); return b; }
+                    }
+                    if (e < n && f[e] == '(') { pendingFuncStart = tokenStart; pendingParen = e; return e; }
+                    string word = f.Substring(pos, e - pos);
+                    bool isBoolean = tokenStart == pos && (string.Equals(word, "TRUE", StringComparison.OrdinalIgnoreCase) || string.Equals(word, "FALSE", StringComparison.OrdinalIgnoreCase));
+                    if (!isBoolean) Add(tokens, f, TokenKind.Name, tokenStart, e, pos - tokenStart);
+                    return e;
+                }
+                if (IsDigit(c)) return SkipNumber(f, pos);
+                return pos + 1;
+            }
+
+            // A1-style reference at pos (cell, range, whole columns or whole rows, optional spill '#'); returns its end or -1.
+            private static int MatchA1(string f, int pos)
+            {
+                int n = f.Length;
+                if (ReadCell(f, pos, out int e1))
+                {
+                    int end = e1;
+                    if (end < n && f[end] == ':' && ReadCell(f, end + 1, out int e2)) end = e2;
+                    else if (end < n && f[end] == '#') end++;
+                    return IsBoundary(f, end) ? end : -1;
+                }
+                if (ReadColumn(f, pos, out int c1) && c1 < n && f[c1] == ':' && ReadColumn(f, c1 + 1, out int c2) && IsBoundary(f, c2)) return c2;
+                if (ReadRow(f, pos, out int r1) && r1 < n && f[r1] == ':' && ReadRow(f, r1 + 1, out int r2) && IsBoundary(f, r2)) return r2;
+                return -1;
+            }
+
+            private static bool ReadCell(string f, int pos, out int end)
+            {
+                end = pos;
+                if (!ReadColumn(f, pos, out int p)) return false;
+                return ReadRow(f, p, out end);
+            }
+
+            private static bool ReadColumn(string f, int pos, out int end)
+            {
+                end = pos;
+                int n = f.Length, p = pos;
+                if (p < n && f[p] == '$') p++;
+                int start = p, col = 0;
+                while (p < n && IsAsciiLetter(f[p])) { col = col * 26 + (char.ToUpperInvariant(f[p]) - 'A' + 1); p++; if (p - start > 3) return false; }
+                if (p == start || col > MaxColumn) return false;
+                end = p;
+                return true;
+            }
+
+            private static bool ReadRow(string f, int pos, out int end)
+            {
+                end = pos;
+                int n = f.Length, p = pos;
+                if (p < n && f[p] == '$') p++;
+                int start = p;
+                long row = 0;
+                while (p < n && IsDigit(f[p])) { row = row * 10 + (f[p] - '0'); p++; if (p - start > 7) return false; }
+                if (p == start || row < 1 || row > MaxRow) return false;
+                end = p;
+                return true;
+            }
+
+            // A reference must not run straight into more name characters, a '(' (function call) or a '[' / '!'.
+            private static bool IsBoundary(string f, int end)
+            {
+                if (end >= f.Length) return true;
+                char c = f[end];
+                return !(IsNameChar(c) || c == '(' || c == '[' || c == '!');
+            }
+
+            // Unquoted sheet name (letters, digits, '_' or '.'), plus ":LastSheet" when it forms a 3D prefix.
+            private static int ReadSheetName(string f, int pos)
+            {
+                int n = f.Length, p = pos;
+                while (p < n && IsSheetChar(f[p])) p++;
+                if (p > pos && p < n && f[p] == ':')
+                {
+                    int q = p + 1;
+                    while (q < n && IsSheetChar(f[q])) q++;
+                    if (q > p + 1 && q < n && f[q] == '!') return q;
+                }
+                return p;
+            }
+
+            private static int SkipString(string f, int i)
+            {
+                int n = f.Length, j = i + 1;
+                while (j < n)
+                {
+                    if (f[j] == '"') { if (j + 1 < n && f[j + 1] == '"') { j += 2; continue; } return j + 1; }
+                    j++;
+                }
+                return n;
+            }
+
+            private static int SkipQuoted(string f, int i)
+            {
+                int n = f.Length, j = i + 1;
+                while (j < n)
+                {
+                    if (f[j] == '\'') { if (j + 1 < n && f[j + 1] == '\'') { j += 2; continue; } return j + 1; }
+                    j++;
+                }
+                return n;
+            }
+
+            private static int SkipArrayConstant(string f, int i)
+            {
+                int n = f.Length, j = i + 1;
+                while (j < n)
+                {
+                    if (f[j] == '"') { j = SkipString(f, j); continue; }
+                    if (f[j] == '}') return j + 1;
+                    j++;
+                }
+                return n;
+            }
+
+            // Table references can nest brackets; a ' escapes the next character.
+            private static int SkipBrackets(string f, int i)
+            {
+                int n = f.Length, depth = 0, j = i;
+                while (j < n)
+                {
+                    char c = f[j];
+                    if (c == '\'') { j += 2; continue; }
+                    if (c == '[') depth++;
+                    else if (c == ']') { depth--; if (depth == 0) return j + 1; }
+                    j++;
+                }
+                return -1;
+            }
+
+            private static int SkipErrorLiteral(string f, int i)
+            {
+                int n = f.Length, j = i + 1;
+                while (j < n && (char.IsLetterOrDigit(f[j]) || f[j] == '/' || f[j] == '_')) j++;
+                if (j < n && (f[j] == '!' || f[j] == '?')) j++;
+                return j;
+            }
+
+            private static int SkipNumber(string f, int i)
+            {
+                int n = f.Length, j = i;
+                while (j < n && (IsDigit(f[j]) || f[j] == '.')) j++;
+                if (j + 1 < n && (f[j] == 'E' || f[j] == 'e') && (f[j + 1] == '+' || f[j + 1] == '-' || IsDigit(f[j + 1])))
+                {
+                    j += 2;
+                    while (j < n && IsDigit(f[j])) j++;
+                }
+                return Math.Max(j, i + 1);
+            }
+
+            private static void Add(List<Token> tokens, string f, TokenKind kind, int start, int end, int prefixLength = 0)
+            {
+                tokens.Add(new Token { Kind = kind, Start = start, Length = end - start, Text = f.Substring(start, end - start), PrefixLength = prefixLength });
+            }
+
+            private static bool IsDigit(char c) => c >= '0' && c <= '9';
+            private static bool IsAsciiLetter(char c) => (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+            private static bool IsNameStart(char c) => char.IsLetter(c) || c == '_' || c == '\\';
+            private static bool IsNameChar(char c) => char.IsLetterOrDigit(c) || c == '_' || c == '.' || c == '\\' || c == '?';
+            private static bool IsSheetChar(char c) => char.IsLetterOrDigit(c) || c == '_' || c == '.';
         }
 
         private static object UnwrapIfArray(object val)
@@ -414,13 +858,23 @@ namespace OfficePragmatics_Excel
         {
             if (errorValue is int i)
             {
-                if (i == -2146826281) return "#DIV/0!";
-                if (i == -2146826246) return "#N/A";
-                if (i == -2146826259) return "#NAME?";
-                if (i == -2146826288) return "#NULL!";
-                if (i == -2146826252) return "#NUM!";
-                if (i == -2146826265) return "#REF!";
-                if (i == -2146826284) return "#VALUE!";
+                switch (i - unchecked((int)0x800A0000))
+                {
+                    case 2000: return "#NULL!";
+                    case 2007: return "#DIV/0!";
+                    case 2015: return "#VALUE!";
+                    case 2023: return "#REF!";
+                    case 2029: return "#NAME?";
+                    case 2036: return "#NUM!";
+                    case 2042: return "#N/A";
+                    case 2043: return "#GETTING_DATA";
+                    case 2045: return "#SPILL!";
+                    case 2046: return "#CONNECT!";
+                    case 2047: return "#BLOCKED!";
+                    case 2048: return "#UNKNOWN!";
+                    case 2049: return "#FIELD!";
+                    case 2050: return "#CALC!";
+                }
             }
             try { return errorValue.ToString(); } catch { return "#ERROR!"; }
         }
@@ -436,6 +890,9 @@ namespace OfficePragmatics_Excel
             public int Length { get; }
             public int Level { get; set; }
             public int ColorIndex { get; set; } = -1;
+            public string RefText { get; set; }    // the reference as written in the formula, folder included
+            public string SpanText { get; set; }   // text this entry covers in the shown formula, if not DisplayText
+            public bool IsName { get; set; }       // a defined name
 
             public PrecedentInfo(Excel.Range rng, string disp, int start, int len) { IsReference = true; Range = rng; DisplayText = disp; Start = start; Length = len; }
             public PrecedentInfo(string disp, int start, int len, string val) { IsReference = false; DisplayText = disp; FunctionVal = val; Start = start; Length = len; }
@@ -829,7 +1286,7 @@ namespace OfficePragmatics_Excel
                     var newPrecedents = new List<PrecedentInfo>();
                     try { ParseFormula(_cachedApp, formula, targetCell, newPrecedents); } finally { _cachedApp.Calculation = calc; _cachedApp.ScreenUpdating = scrn; }
 
-                    newPrecedents.Sort((a, b) => a.Start.CompareTo(b.Start)); _precedents = newPrecedents; _origin = targetCell;
+                    _precedents = SortByStart(newPrecedents); _origin = targetCell;
                     string prefix = _origin.Address[false, false] + "="; int baseOffset = prefix.Length - 1;
                     foreach (var p in newPrecedents) { int currentStart = (int)BfStart.GetValue(p); BfStart.SetValue(p, currentStart + baseOffset); }
                     List<Replacement> reps; string simplified = SimplifyFormulaForDisplay(formula, out reps); RetargetPrecedentSpansForDisplay(_precedents, reps); FixNonReferenceLengthsUsingDisplayedFormula(_precedents, simplified); string displayed = prefix + simplified.Substring(1); string newFormulaText = InjectZeroWidthSpacesAndRemap(displayed, _precedents); var newLabel = new RichTextBox { Dock = DockStyle.None, ReadOnly = true, BorderStyle = BorderStyle.None, BackColor = Color.White, Font = new Font("Segoe UI", 10), Text = newFormulaText, HideSelection = true, TabStop = false, WordWrap = true, ScrollBars = RichTextBoxScrollBars.None }; _formulaPanel.Controls.Add(newLabel); newLabel.BringToFront(); _currentFormulaLabel = newLabel; _shown.Clear(); _list.Items.Clear(); ColorizeFormula(); PopulateList(); _cur = _list.Items.Count > 0 ? 0 : -1; if (_cur != -1) { _list.Items[_cur].Selected = true; Highlight(); }
@@ -890,17 +1347,6 @@ namespace OfficePragmatics_Excel
                 _workbooksToClose.Clear();
             }
 
-            private string ExtractWorkbookPath(string refText)
-            {
-                int bookEnd = refText.IndexOf(']'); if (bookEnd < 0) return null;
-                int bookStart = refText.LastIndexOf('[', bookEnd); if (bookStart < 0) return null;
-                string bookName = refText.Substring(bookStart + 1, bookEnd - bookStart - 1);
-                string fullPath = null;
-                if (refText.StartsWith("'") && refText.Substring(1).Contains(":\\")) { int pathEnd = bookStart; string path = refText.Substring(1, pathEnd - 1); fullPath = Path.Combine(path, bookName); }
-                else { try { string activeWorkbookPath = _origin.Worksheet.Parent.Path; if (!string.IsNullOrEmpty(activeWorkbookPath)) { fullPath = Path.Combine(activeWorkbookPath, bookName); } } catch { } }
-                return fullPath;
-            }
-
             // Workbooks that Trace opens or closes in the background do so with Excel events
             // paused, so code inside them (Workbook_Open, Workbook_BeforeClose) doesn't run
             // just because a formula points at them. Reading cells and formulas is unaffected.
@@ -922,19 +1368,59 @@ namespace OfficePragmatics_Excel
                 finally { try { _cachedApp.EnableEvents = events; } catch { } }
             }
 
+            // Opens the workbook a reference points to, if it's closed, and returns the referenced cells. The
+            // folder comes from the reference itself (a drive, a network share or SharePoint/OneDrive); only a
+            // reference without a folder is looked for next to the workbook being traced.
             private Excel.Range ResolveClosedReference(string refText)
             {
-                string bookPath = ExtractWorkbookPath(refText);
-                if (string.IsNullOrEmpty(bookPath) || !File.Exists(bookPath)) return null;
-                foreach (Excel.Workbook wbCheck in _cachedApp.Workbooks) { if (wbCheck.FullName.Equals(bookPath, StringComparison.OrdinalIgnoreCase)) { try { return _cachedApp.Range[refText]; } catch { return null; } } }
-                try
+                if (string.IsNullOrEmpty(refText)) return null;
+                var m = ExternalRefRx.Match(refText);
+                if (!m.Success) return null;
+                string folder = m.Groups["path"].Value.Replace("''", "'");
+                string book = m.Groups["book"].Value.Replace("''", "'");
+                string sheet = m.Groups["sheet"].Value.Replace("''", "'");
+                string address = m.Groups["addr"].Value;
+                if (sheet.IndexOf(':') >= 0) return null;   // a range of sheets in another workbook
+
+                bool isUrl = folder.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || folder.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+                string fullPath = null;
+                if (folder.Length > 0) fullPath = isUrl ? (folder.EndsWith("/") ? folder : folder + "/") + book : Path.Combine(folder, book);
+
+                Excel.Workbook wb = null;
+                foreach (Excel.Workbook open in _cachedApp.Workbooks)
                 {
-                    this.TopMost = true;
-                    try { var wb = OpenTracedWorkbook(bookPath); _workbooksToClose.Add(wb); }
-                    finally { this.TopMost = true; this.Activate(); }
-                    return _cachedApp.Range[refText];
+                    bool match = fullPath != null
+                        ? string.Equals(open.FullName, fullPath, StringComparison.OrdinalIgnoreCase)
+                        : string.Equals(open.Name, book, StringComparison.OrdinalIgnoreCase);
+                    if (match) { wb = open; break; }
                 }
-                catch { return null; }
+
+                if (wb == null)
+                {
+                    if (fullPath == null)
+                    {
+                        try { string dir = ((Excel.Workbook)_origin.Worksheet.Parent).Path; if (!string.IsNullOrEmpty(dir)) fullPath = Path.Combine(dir, book); } catch { }
+                        if (fullPath == null) return null;
+                    }
+                    // A different file with the same name is open: Excel can't open both, and that one isn't the linked file.
+                    foreach (Excel.Workbook open in _cachedApp.Workbooks)
+                        if (string.Equals(open.Name, book, StringComparison.OrdinalIgnoreCase)) return null;
+                    if (!isUrl && !File.Exists(fullPath)) return null;
+                    try
+                    {
+                        this.TopMost = true;
+                        try { wb = OpenTracedWorkbook(fullPath); _workbooksToClose.Add(wb); }
+                        finally { this.TopMost = true; this.Activate(); }
+                    }
+                    catch { return null; }
+                }
+
+                try { return ((Excel.Worksheet)wb.Worksheets[sheet]).Range[address]; }
+                catch
+                {
+                    if (!address.EndsWith("#", StringComparison.Ordinal)) return null;
+                    try { return ((Excel.Worksheet)wb.Worksheets[sheet]).Range[address.Substring(0, address.Length - 1)]; } catch { return null; }
+                }
             }
 
             private void OnSelectedIndexChanged(object sender, EventArgs e) { if (_updating) return; if (_list.SelectedIndices.Count > 0) { _cur = _list.SelectedIndices[0]; Highlight(); } }
@@ -1102,7 +1588,7 @@ namespace OfficePragmatics_Excel
                 else { var parts = p.DisplayText.Split('('); name = string.IsNullOrWhiteSpace(parts[0]) ? "( )" : parts[0]; }
                 var item = new ListViewItem(name) { Tag = p };
                 if (!p.IsReference) item.ForeColor = Color.Gray;
-                string fText = IsDrillable(p) ? "↪" : (!p.IsReference ? "fx" : "");
+                string fText = IsDrillable(p) ? "↪" : (!p.IsReference && !p.IsName ? "fx" : "");
                 var fSub = new ListViewItem.ListViewSubItem(item, fText) { ForeColor = Color.Gray };
                 if (fText == "fx") fSub.Font = _italicFont;
                 item.SubItems.Add(fSub);
@@ -1324,7 +1810,7 @@ namespace OfficePragmatics_Excel
             {
                 if (_cur < 0 || _cur >= _shown.Count) return;
                 var sel = _shown[_cur];
-                if (sel.IsReference && sel.Range == null) { Excel.Range newRange = ResolveClosedReference(sel.DisplayText); if (newRange != null) { sel.UpdateRange(newRange); _list.Items[_cur].SubItems[2].Text = GetFormattedValue(newRange); } }
+                if (sel.IsReference && sel.Range == null) { Excel.Range newRange = ResolveClosedReference(sel.RefText ?? sel.DisplayText); if (newRange != null) { sel.UpdateRange(newRange); _list.Items[_cur].SubItems[2].Text = GetFormattedValue(newRange); } }
                 _updating = true; RestoreHidden();
                 if (_prevStart >= 0) { _currentFormulaLabel.Select(_prevStart, _prevLen); _currentFormulaLabel.SelectionBackColor = _currentFormulaLabel.BackColor; }
                 foreach (ListViewItem li in _list.Items) li.BackColor = _list.BackColor;
